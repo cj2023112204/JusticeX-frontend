@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const Article = ({ title, author, date, content }) => {
+const Article = ({ title, author, date, content }: any) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
