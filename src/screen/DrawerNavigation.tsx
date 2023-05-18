@@ -2,7 +2,7 @@ import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeScreen from "./HomeScreen";
-import PorfileScreen from "./PorfileScreen";
+import ProfileScreen from "./ProfileScreen";
 
 const Drawer = createDrawerNavigator();
 
@@ -11,7 +11,7 @@ const DrawerNavigation = () => {
         <NavigationContainer>
             <Drawer.Navigator initialRouteName="Home">
                 <Drawer.Screen name="首頁" component={HomeScreen} />
-                <Drawer.Screen name="個人資料" component={PorfileScreen} />
+                <Drawer.Screen name="個人資料" component={ProfileScreen} />
             </Drawer.Navigator>
         </NavigationContainer>
     )
