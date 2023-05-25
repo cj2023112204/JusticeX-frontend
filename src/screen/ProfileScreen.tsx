@@ -7,7 +7,7 @@ import FontIcon from 'react-native-vector-icons/FontAwesome';
 import HomeScreen from "./HomeScreen";
 
 const PorfileScreen = () => {
-  const avatarSource = require('./assets/images/photo.jpg'); // 替换为实际的头像图片路径
+  const avatarSource = require('../assets/images/chihiro007.jpg'); // 替换为实际的头像图片路径
   const name = 'John Doe'; // 替换为实际的姓名数据
 
   const handleLogout = () => {
