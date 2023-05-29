@@ -1,14 +1,34 @@
-import React from "react";
-import { View } from "react-native";
-import DrawerNavigation from "./src/screen/DrawerNavigation";
-import { NavigationContainer } from '@react-navigation/native';
-import Navigation from "./src/screen/StackNavigation";
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ *
+ * @format
+ */
+
+import React from 'react';
+import type { PropsWithChildren } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, } from 'react-native';
+import Navigation from './src/navigation';
+
+type SectionProps = PropsWithChildren<{
+  title: string;
+}>;
+
+
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <DrawerNavigation />
-    </NavigationContainer>
+    <SafeAreaView style={styles.root}>
+      <Navigation />
+    </SafeAreaView>
   );
-};
+}
+
+const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: '#F9FBFC'
+  }
+});
+
 export default App;
