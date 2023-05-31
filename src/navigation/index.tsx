@@ -43,8 +43,8 @@ const Navigation = () => {
         <Stack.Screen name='PersonalInfo' component={PersonalInfoScreen} />
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Article" component={Article} options={{ title: '文章詳情' }} />
-        <Stack.Screen name="Comment" component={Comment} options={{ title: '判例詳情' }} />
+        {/* <Stack.Screen name="Article" component={Article} options={{ title: '文章詳情' , headerShown: true}} /> */}
+        <Stack.Screen name="Comment" component={Comment} options={{ title: '判例詳情', headerShown: true }} />
         {/* <Stack.Screen name='Home' component={Home} /> */}
 
       </Stack.Navigator>
