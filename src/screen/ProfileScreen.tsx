@@ -5,7 +5,7 @@ import ChangeAvatar from "./ChangeAvatarScreen";
 import { useNavigation } from '@react-navigation/native';
 
 const PorfileScreen = () => {
-  const avatarSource = require('./assets/images/photo.jpg'); // 替换为实际的头像图片路径
+  const avatarSource = require('../../assets/images/photo.jpg'); // 替换为实际的头像图片路径
   const name = 'John Doe'; // 替换为实际的姓名数据
 
 
