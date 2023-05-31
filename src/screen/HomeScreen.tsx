@@ -59,6 +59,7 @@ const HomeScreen = () => {
   const handleCategoryPress = (category: any) => {
     setActiveCategory(category);
     setIsLatest(category.id === 2 ? 1 : 0);
+    setArticles([]); // 清空articles数组
   };
 
   const renderArticleItem = ({ item }: { item: Article }) => {

@@ -5,23 +5,23 @@ import ChangeAvatar from "./ChangeAvatarScreen";
 import { useNavigation } from '@react-navigation/native';
 
 const ChangeAvatarScreen = () => {
-  const avatar1 = require('./assets/images/photo1.jpg'); // 替换为实际的头像图片路径
-  const avatar2 = require('./assets/images/photo2.jpg');
-  const avatar3 = require('./assets/images/photo3.jpg');
-  const avatar4 = require('./assets/images/photo4.jpg');
-  const avatar5 = require('./assets/images/photo5.jpg');
-  const avatar6 = require('./assets/images/photo6.jpg');
-  const avatar7 = require('./assets/images/photo7.jpg');
-  const avatar8 = require('./assets/images/photo8.jpg');
-  const avatar9 = require('./assets/images/photo9.jpg');
-  const avatar10 = require('./assets/images/photo10.jpg');
-  const avatar11 = require('./assets/images/photo11.jpg');
-  const avatar12 = require('./assets/images/photo12.jpg');
-  const avatar13 = require('./assets/images/photo13.jpg');
-  const avatar14 = require('./assets/images/photo14.jpg');
-  const avatar15 = require('./assets/images/photo15.jpg');
-  const avatar16 = require('./assets/images/photo16.jpg');
-  const avatar17 = require('./assets/images/photo17.jpg');
+  const avatar1 = require('../../assets/images/photo1.jpg'); // 替换为实际的头像图片路径
+  const avatar2 = require('../../assets/images/photo2.jpg');
+  const avatar3 = require('../../assets/images/photo3.jpg');
+  const avatar4 = require('../../assets/images/photo4.jpg');
+  const avatar5 = require('../../assets/images/photo5.jpg');
+  const avatar6 = require('../../assets/images/photo6.jpg');
+  const avatar7 = require('../../assets/images/photo7.jpg');
+  const avatar8 = require('../../assets/images/photo8.jpg');
+  const avatar9 = require('../../assets/images/photo9.jpg');
+  const avatar10 = require('../../assets/images/photo10.jpg');
+  // const avatar11 = require('../../assets/images/photo11.jpg');
+  const avatar12 = require('../../assets/images/photo12.jpg');
+  const avatar13 = require('../../assets/images/photo13.jpg');
+  const avatar14 = require('../../assets/images/photo14.jpg');
+  const avatar15 = require('../../assets/images/photo15.jpg');
+  const avatar16 = require('../../assets/images/photo16.jpg');
+  const avatar17 = require('../../assets/images/photo17.jpg');
 
 
   
