@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View, Dimensions, Platform } from 'react-native';
 import SearchBar from "react-native-dynamic-search-bar";
-import Article from './Article';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CommentList from './Comment';
 import { API_URL } from '../../config';
 
 const { width } = Dimensions.get('window');
@@ -18,8 +16,11 @@ interface Article {
   verdict_id: number;
   title: string;
   judgement_date: string;
+  total_like: number;
+  total_comment: number;
+  crime_type: string;
 }
-
+const Separator = () => <View style={styles.separator} />;
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [activeCategory, setActiveCategory] = useState(categories[0]);
@@ -43,7 +44,8 @@ const HomeScreen = () => {
         .then(response => response.json())
         .then(responseData => {
           const data = responseData.data;
-          setArticles(prevArticles => [...prevArticles, ...data]);
+          const uniqueData = data.filter((item: Article) => !articles.some(article => article.verdict_id === item.verdict_id));
+          setArticles(prevArticles => [...prevArticles, ...uniqueData]);
         })
         .catch(error => {
           console.error(error);
@@ -54,133 +56,106 @@ const HomeScreen = () => {
 
   const handleNextPage = () => {
     const nextPage = currentPage + 1;
-    fetchArticles(nextPage, isLatest);
     setCurrentPage(nextPage);
-  };
-
-  const handlePrevPage = () => {
-    const prevPage = currentPage - 1;
-    fetchArticles(prevPage, isLatest);
-    setCurrentPage(prevPage);
-  };
-
-  const handlePageChange = (pageNumber: number) => {
-    fetchArticles(pageNumber, isLatest);
-    setCurrentPage(pageNumber);
+    fetchArticles(nextPage, isLatest);
   };
 
   const handleCategoryPress = (category: any) => {
     setActiveCategory(category);
     setIsLatest(category.id === 2 ? 1 : 0);
     setArticles([]);
-    setCurrentPage(1); // 重置为第一页
+    setCurrentPage(1);
+    fetchArticles(1, category.id === 2 ? 1 : 0); // Fetch articles immediately when category is changed
   };
 
   const handleSearch = (text: string) => {
     setSearchText(text);
+    setCurrentPage(1);
+    if (text === '') {
+      setFilteredArticles(articles); // 將過濾後的文章設置為原始文章列表
+    } else {
+      const filteredArticles = articles.filter(article =>
+        article.title.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredArticles(filteredArticles);
+    }
+    fetchArticles(1, isLatest); // 發送網路請求以獲取符合搜尋文字的結果的第一頁
   };
 
-  const filteredArticles = articles.filter(article =>
-    article.title.toLowerCase().includes(searchText.toLowerCase())
-  );
+  const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
+
+  useEffect(() => {
+    if (searchText === '') {
+      setFilteredArticles(articles);
+    } else {
+      const filteredArticles = articles.filter(article =>
+        article.title.toLowerCase().includes(searchText.toLowerCase())
+      );
+      setFilteredArticles(filteredArticles);
+    }
+  }, [searchText, articles]);
+
 
   const renderArticleItem = ({ item }: { item: Article }) => {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('Comment' as never)}>
-        <View style={{ marginBottom: 16 }}>
+      <TouchableOpacity onPress={() => navigation.navigate('Comment', { verdictId: item.verdict_id })}>
+        <View style={styles.articleContainer}>
           <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
           <Text style={{ fontSize: 14 }}>{item.judgement_date}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ marginRight: 8 }}>Like: {item.total_like}</Text>
+              <Text>Comment: {item.total_comment}</Text>
+            </View>
+            <Text style={styles.crimeTypeLabel}>{item.crime_type}</Text>
+          </View>
         </View>
       </TouchableOpacity>
     );
   };
 
-  const renderPagination = () => {
+  const renderLoadMoreButton = () => {
     if (filteredArticles.length > 0) {
-      const totalPages = Math.ceil(filteredArticles.length / 10); // 假设每页显示10个文章
-      const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
-      const visiblePageNumbers = pageNumbers.slice(Math.max(currentPage - 2, 0), currentPage + 3);
+      const totalPages = Math.ceil(filteredArticles.length / 10);
+      const hasNextPage = currentPage < totalPages;
 
-      const renderPageNumbers = visiblePageNumbers.map(pageNumber => (
-        <TouchableOpacity
-          key={pageNumber}
-          style={[
-            styles.paginationButton,
-            currentPage === pageNumber && styles.activePaginationButton,
-            styles.pageNumberButton,
-          ]}
-          onPress={() => handlePageChange(pageNumber)}
-        >
-          <Text
-            style={[
-              styles.paginationButtonText,
-              currentPage === pageNumber && styles.activePaginationButtonText,
-              styles.pageNumberText,
-            ]}
-          >
-            {pageNumber}
-          </Text>
-        </TouchableOpacity>
-      ));
-
-      return (
-        <View style={styles.paginationContainer}>
-          {currentPage > 1 && (
-            <TouchableOpacity
-              style={[styles.paginationButton, styles.pageNumberButton]}
-              onPress={handlePrevPage}
-            >
-              <Text style={[styles.paginationButtonText, styles.pageNumberText]}>Prev</Text>
-            </TouchableOpacity>
-          )}
-          {visiblePageNumbers[0] > 1 && (
-            <TouchableOpacity
-              style={styles.paginationButton}
-              onPress={() => handlePageChange(visiblePageNumbers[0] - 1)}
-            >
-              <Text style={styles.paginationButtonText}>...</Text>
-            </TouchableOpacity>
-          )}
-          {renderPageNumbers}
-          {visiblePageNumbers[visiblePageNumbers.length - 1] < totalPages && (
-            <TouchableOpacity
-              style={styles.paginationButton}
-              onPress={() => handlePageChange(visiblePageNumbers[visiblePageNumbers.length - 1] + 1)}
-            >
-              <Text style={styles.paginationButtonText}>...</Text>
-            </TouchableOpacity>
-          )}
-          {currentPage < totalPages && (
-            <TouchableOpacity
-              style={[styles.paginationButton, styles.pageNumberButton]}
-              onPress={handleNextPage}
-            >
-              <Text style={[styles.paginationButtonText, styles.pageNumberText]}>Next</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      );
+      if (hasNextPage) {
+        return (
+          <TouchableOpacity style={styles.loadMoreButton} onPress={handleLoadMore}>
+            <Text style={styles.loadMoreButtonText}>Load More</Text>
+          </TouchableOpacity>
+        );
+      }
     }
+
     return null;
   };
 
+  const handleLoadMore = () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    fetchArticles(nextPage, isLatest);
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setSearchText('');
+      setFilteredArticles([]);
+      setCurrentPage(1);
+      fetchArticles(1, isLatest);
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <View style={styles.container}>
-      <SearchBar
-        placeholder="Search here"
-        onChangeText={handleSearch}
-        style={styles.searchbar}
-      />
-      <View style={styles.categoryBar}>
+      <View style={styles.categoryContainer}>
         {categories.map(category => (
           <TouchableOpacity
             key={category.id}
-            style={[
-              styles.categoryButton,
-              { width: width / categories.length },
-              activeCategory.id === category.id && styles.activeCategoryButton,
-            ]}
             onPress={() => handleCategoryPress(category)}
+            style={[styles.categoryButton, activeCategory.id === category.id && styles.activeCategoryButton]}
           >
             <Text
               style={[
@@ -193,12 +168,23 @@ const HomeScreen = () => {
           </TouchableOpacity>
         ))}
       </View>
+      <SearchBar
+        placeholder="Search"
+        onPressToFocus={true}
+        onChangeText={handleSearch}
+        style={styles.searchBar}
+        fontColor="#666"
+        iconColor="#666"
+        shadowColor="#333"
+      />
       <FlatList
         data={filteredArticles}
         renderItem={renderArticleItem}
-        keyExtractor={(item, index) => `${item.title}-${index}`}
+        keyExtractor={(item, index) => `${item.verdict_id}-${index}`}
+        contentContainerStyle={styles.articleListContainer}
+        ItemSeparatorComponent={Separator}
+        ListFooterComponent={renderLoadMoreButton}
       />
-      {renderPagination()}
     </View>
   );
 };
@@ -206,64 +192,68 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    padding: 16,
   },
-  searchbar: {
-    height: 56,
-    width: '100%',
-  },
-  categoryBar: {
+  categoryContainer: {
     flexDirection: 'row',
-    backgroundColor: '#eee',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  categoryButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'gray',
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
   categoryButton: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: '#f0f0f0',
   },
   activeCategoryButton: {
-    backgroundColor: '#fff',
-    borderBottomWidth: 2,
-    borderBottomColor: 'black',
+    backgroundColor: '#2196F3',
+  },
+  categoryButtonText: {
+    color: '#666',
   },
   activeCategoryButtonText: {
-    color: 'black',
+    color: '#fff',
   },
-  paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+  searchBar: {
+    marginBottom: 16,
+  },
+  articleListContainer: {
+    paddingBottom: 16,
+  },
+  loadMoreButton: {
     alignItems: 'center',
-    marginVertical: 10,
+    padding: 16,
   },
-  paginationButton: {
-    backgroundColor: '#eee',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginHorizontal: 5,
-    borderRadius: 5,
-  },
-  activePaginationButton: {
-    backgroundColor: 'black',
-  },
-  paginationButtonText: {
+  loadMoreButtonText: {
+    color: '#2196F3',
     fontSize: 16,
+  },
+  crimeTypeLabel: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#2196F3',
+    borderRadius: 4,
+    color: '#fff',
     fontWeight: 'bold',
-    color: 'black',
+    fontSize: 12,
+    alignSelf: 'flex-start',
+    marginTop: 4,
   },
-  pageNumberButton: {
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+  articleContainer: {
+    marginBottom: 16,
   },
-  pageNumberText: {
-    color: 'white',
+  separator: {
+    height: StyleSheet.hairlineWidth,
+    width: '100%',
+    backgroundColor: '#ccc',
+    ...Platform.select({
+      ios: {
+        marginLeft: 16,
+      },
+      android: {
+        paddingLeft: 16,
+      },
+    }),
   },
 });
 
