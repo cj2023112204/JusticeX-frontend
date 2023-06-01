@@ -8,7 +8,7 @@ const PorfileScreen = () => {
 
   const navigation = useNavigation();
   const onPressed = () => {
-    navigation.navigate('Favorite' as never); // Remove unnecessary type casting
+    navigation.navigate('ChangePassword' as never); // Remove unnecessary type casting
   };
   const changeavatar = () => {
     navigation.navigate('ChangeAvatar' as never); // Remove unnecessary type casting
@@ -46,7 +46,7 @@ const PorfileScreen = () => {
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.favoriteButton} onPress={onPressed}>
-          <Text style={styles.TextTitle}>favorite</Text>
+          <Text style={styles.TextTitle}>change password</Text>
         </TouchableOpacity>
       </View>
 
