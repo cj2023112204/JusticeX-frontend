@@ -12,6 +12,10 @@ import PersonalInfoScreen from '../screen/PersonalInfoScreen';
 import VerifyCodeScreen from '../screen/VerifyCodeScreen'
 import QuizScreen from '../screen/QuizScreen'
 import ProfileScreen from "../screen/ProfileScreen";
+import ChangePasswordScreen from '../screen/ChangePasswordScreen';
+import ChangeAvatarScreen from "../screen/ChangeAvatarScreen";
+import ChangePprofileScreen from "../screen/ChangeProfileScreen";
+import FavoriteScreen from "../screen/FavoriteScreen";
 import HomeScreen from '../screen/HomeScreen';
 import Article from '../screen/Article';
 import Comment from '../screen/Comment';
@@ -42,6 +46,7 @@ const DrawerNavigation = () => {
     <Drawer.Navigator initialRouteName="Home" screenOptions={{ headerShown: true }}>
       <Drawer.Screen name="首頁" component={HomeStack} />
       <Drawer.Screen name="個人資料" component={ProfileScreen} />
+      <Drawer.Screen name="收藏" component={FavoriteScreen} />
     </Drawer.Navigator>
   )
 }
@@ -59,6 +64,11 @@ const Navigation = () => {
         <Stack.Screen name='ForgotPassword' component={ForgotPasswordScreen} />
         <Stack.Screen name='ResetPassword' component={ResetPasswordScreen} />
         <Stack.Screen name='PersonalInfo' component={PersonalInfoScreen} />
+        <Stack.Screen name='ChangePassword' component={ChangePasswordScreen} />
+        <Stack.Screen name='ChangeAvatar' component={ChangeAvatarScreen} options={{ title: '更改頭貼' , headerShown: true}}/>
+        <Stack.Screen name='ChangePprofile' component={ChangePprofileScreen} options={{ title: '更改個人資料' , headerShown: true}} />
+        <Stack.Screen name='Favorite' component={FavoriteScreen} />
+        <Stack.Screen name='Profile' component={ProfileScreen} />
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
         <Stack.Screen name="Comment" component={Comment} options={{ title: '判例詳情' , headerShown: true}} />
         <Stack.Screen name="Article" component={Article} options={{ title: '文章詳情' , headerShown: true}} />
