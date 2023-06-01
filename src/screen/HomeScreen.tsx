@@ -1,12 +1,3 @@
-<<<<<<< HEAD
-import * as React from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import SearchBar from "react-native-dynamic-search-bar";
-import Article from './Article';
-import { useEffect,useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
-import CommentList from './Comment';
-=======
 import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import SearchBar from "react-native-dynamic-search-bar";
@@ -17,66 +8,23 @@ import CommentList from './Comment';
 import { API_URL } from '../../config';
 
 const { width } = Dimensions.get('window');
->>>>>>> 9441ecd3c0919336791fcc4206097f305f35815d
 
 const categories = [
   { id: 1, name: '熱門判例' },
   { id: 2, name: '最新判例' },
 ];
-<<<<<<< HEAD
-=======
 
->>>>>>> 9441ecd3c0919336791fcc4206097f305f35815d
 interface Article {
   verdict_id: number;
   title: string;
   judgement_date: string;
 }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 9441ecd3c0919336791fcc4206097f305f35815d
 const HomeScreen = () => {
   const navigation = useNavigation();
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [articles, setArticles] = useState<Article[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
-<<<<<<< HEAD
-
-  useEffect(() => {
-    fetchArticles(currentPage);
-  }, []);
-  const fetchArticles= (page: number) => {
-    fetch(`http://13.208.146.112:8000/api/verdict/get_verdicts/?page=${page}&is_latest=0`, {
-      headers: {
-        Authorization: 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzE0MDI0NjQ1LCJpYXQiOjE2ODI0ODg2NDUsImp0aSI6IjA0MjljMTdiNzg2MDQyNzU4MzJiZTJjYWM2ODU4MTZlIiwidXNlcl9pZCI6ImV4YW1wbGVAZXhhbXBsZS5jb20ifQ.yAE_l0hSX5ygOyeZrZaHmw-OspVUZcLU5-t0dIYNdqw',
-        // 其他標頭欄位...
-      }
-    })
-      .then(response => response.json())
-      .then(responseData => {
-        const data = responseData.data; // 取得回應資料的 data 屬性
-        setArticles(prevArticles => [...prevArticles, ...data]); // 將 data 設定給 articles 狀態
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  };
-
-  const handleLoadMore = () => {
-    const nextPage = currentPage + 1;
-    fetchArticles(nextPage);
-    setCurrentPage(nextPage);
-  };
-  // const handleArticlePress = (item: any) => {
-  //   navigation.navigate('Comment', { article: item });
-  // };
-
-  const renderArticleItem = ({ item }: { item: Article }) => {
-    return (
-      <TouchableOpacity onPress={()=>navigation.navigate('Comment' as never)}>
-=======
   const [isLatest, setIsLatest] = useState(0);
   const [searchText, setSearchText] = useState('');
 
@@ -139,26 +87,11 @@ const HomeScreen = () => {
   const renderArticleItem = ({ item }: { item: Article }) => {
     return (
       <TouchableOpacity onPress={() => navigation.navigate('Comment' as never)}>
->>>>>>> 9441ecd3c0919336791fcc4206097f305f35815d
         <View style={{ marginBottom: 16 }}>
           <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
           <Text style={{ fontSize: 14 }}>{item.judgement_date}</Text>
         </View>
       </TouchableOpacity>
-<<<<<<< HEAD
-
-    );
-  };
-
-
-  return (
-    <View style={style.container}>
-      <SearchBar
-        placeholder="Search here"
-        onChangeText={(text) => console.log(text)}
-      />
-      <View style={style.categoryBar}>
-=======
     );
   };
 
@@ -239,22 +172,10 @@ const HomeScreen = () => {
         style={styles.searchbar}
       />
       <View style={styles.categoryBar}>
->>>>>>> 9441ecd3c0919336791fcc4206097f305f35815d
         {categories.map(category => (
           <TouchableOpacity
             key={category.id}
             style={[
-<<<<<<< HEAD
-              style.categoryButton,
-              activeCategory.id === category.id && style.activeCategoryButton,
-            ]}
-            onPress={() => setActiveCategory(category)}
-          >
-            <Text
-              style={[
-                style.categoryButtonText,
-                activeCategory.id === category.id && style.activeCategoryButtonText,
-=======
               styles.categoryButton,
               { width: width / categories.length },
               activeCategory.id === category.id && styles.activeCategoryButton,
@@ -265,7 +186,6 @@ const HomeScreen = () => {
               style={[
                 styles.categoryButtonText,
                 activeCategory.id === category.id && styles.activeCategoryButtonText,
->>>>>>> 9441ecd3c0919336791fcc4206097f305f35815d
               ]}
             >
               {category.name}
@@ -274,43 +194,23 @@ const HomeScreen = () => {
         ))}
       </View>
       <FlatList
-<<<<<<< HEAD
-        data={articles}
-        renderItem={renderArticleItem}
-        keyExtractor={item => item.verdict_id.toString()}
-        onEndReached={handleLoadMore}
-        onEndReachedThreshold={0.5}
-      />
-=======
         data={filteredArticles}
         renderItem={renderArticleItem}
         keyExtractor={(item, index) => `${item.title}-${index}`}
       />
       {renderPagination()}
->>>>>>> 9441ecd3c0919336791fcc4206097f305f35815d
     </View>
   );
 };
 
-<<<<<<< HEAD
-export default HomeScreen;
-
-const style = StyleSheet.create({
-  container: {
-=======
 const styles = StyleSheet.create({
   container: {
     flex: 1,
->>>>>>> 9441ecd3c0919336791fcc4206097f305f35815d
     backgroundColor: '#fff',
   },
   searchbar: {
     height: 56,
-<<<<<<< HEAD
-    width: 359
-=======
     width: '100%',
->>>>>>> 9441ecd3c0919336791fcc4206097f305f35815d
   },
   categoryBar: {
     flexDirection: 'row',
@@ -335,9 +235,6 @@ const styles = StyleSheet.create({
   activeCategoryButtonText: {
     color: 'black',
   },
-<<<<<<< HEAD
-})
-=======
   paginationContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
@@ -371,4 +268,3 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
->>>>>>> 9441ecd3c0919336791fcc4206097f305f35815d
