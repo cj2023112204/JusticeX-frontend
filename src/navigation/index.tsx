@@ -14,7 +14,7 @@ import QuizScreen from '../screen/QuizScreen'
 import ProfileScreen from "../screen/ProfileScreen";
 import ChangePasswordScreen from '../screen/ChangePasswordScreen';
 import ChangeAvatarScreen from "../screen/ChangeAvatarScreen";
-import ChangePprofileScreen from "../screen/ChangeProfileScreen";
+import ChangeProfileScreen from "../screen/ChangeProfileScreen";
 import FavoriteScreen from "../screen/FavoriteScreen";
 import HomeScreen from '../screen/HomeScreen';
 import Article from '../screen/Article';
@@ -56,7 +56,7 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         
-        <Stack.Screen name='Quiz' component={QuizScreen} />
+        {/* <Stack.Screen name='Quiz' component={QuizScreen} /> */}
         <Stack.Screen name='SignIn' component={SignInScreen} />
         <Stack.Screen name='Home' component={DrawerNavigation} />
         <Stack.Screen name='SignUp' component={SignUpScreen} />
@@ -65,8 +65,8 @@ const Navigation = () => {
         <Stack.Screen name='ResetPassword' component={ResetPasswordScreen} />
         <Stack.Screen name='PersonalInfo' component={PersonalInfoScreen} />
         <Stack.Screen name='ChangePassword' component={ChangePasswordScreen} />
-        <Stack.Screen name='ChangeAvatar' component={ChangeAvatarScreen} options={{ title: '更改頭貼' , headerShown: true}}/>
-        <Stack.Screen name='ChangePprofile' component={ChangePprofileScreen} options={{ title: '更改個人資料' , headerShown: true}} />
+        <Stack.Screen name='ChangeProfile' component={ChangeProfileScreen} />
+        <Stack.Screen name='ChangeAvatar' component={ChangeAvatarScreen} />
         <Stack.Screen name='Favorite' component={FavoriteScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
