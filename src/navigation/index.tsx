@@ -13,7 +13,7 @@ import VerifyCodeScreen from '../screen/VerifyCodeScreen'
 import QuizScreen from '../screen/QuizScreen'
 import ProfileScreen from "../screen/ProfileScreen";
 import ChangeAvatarScreen from "../screen/ChangeAvatarScreen";
-import ChangePprofileScreen from "../screen/ChangePprofileScreen";
+import ChangePprofileScreen from "../screen/ChangeProfileScreen";
 import FavoriteScreen from "../screen/FavoriteScreen";
 import HomeScreen from '../screen/HomeScreen';
 import Article from '../screen/Article';
@@ -62,6 +62,10 @@ const Navigation = () => {
         <Stack.Screen name='ForgotPassword' component={ForgotPasswordScreen} />
         <Stack.Screen name='ResetPassword' component={ResetPasswordScreen} />
         <Stack.Screen name='PersonalInfo' component={PersonalInfoScreen} />
+        <Stack.Screen name='ChangeAvatar' component={ChangeAvatarScreen} />
+        <Stack.Screen name='ChangePprofile' component={ChangePprofileScreen} />
+        <Stack.Screen name='Favorite' component={FavoriteScreen} />
+        <Stack.Screen name='Profile' component={ProfileScreen} />
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
         <Stack.Screen name="Comment" component={Comment} options={{ title: '判例詳情' , headerShown: true}} />
         <Stack.Screen name="Article" component={Article} options={{ title: '文章詳情' , headerShown: true}} />
