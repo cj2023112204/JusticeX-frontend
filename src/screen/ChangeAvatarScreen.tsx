@@ -1,114 +1,99 @@
 import * as React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { useState } from 'react';
+import { View, Text, Dimensions, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import HomeScreen from "./HomeScreen";
 import ChangeAvatar from "./ChangeAvatarScreen";
 import { useNavigation } from '@react-navigation/native';
+import CustomButton from '../components/CustomButton';
 
-const ChangeAvatarScreen = () => {
-  const avatar1 = require('../../assets/images/photo1.jpg'); // 替换为实际的头像图片路径
-  const avatar2 = require('../../assets/images/photo2.jpg');
-  const avatar3 = require('../../assets/images/photo3.jpg');
-  const avatar4 = require('../../assets/images/photo4.jpg');
-  const avatar5 = require('../../assets/images/photo5.jpg');
-  const avatar6 = require('../../assets/images/photo6.jpg');
-  const avatar7 = require('../../assets/images/photo7.jpg');
-  const avatar8 = require('../../assets/images/photo8.jpg');
-  const avatar9 = require('../../assets/images/photo9.jpg');
-  const avatar10 = require('../../assets/images/photo10.jpg');
-  // const avatar11 = require('../../assets/images/photo11.jpg');
-  const avatar12 = require('../../assets/images/photo12.jpg');
-  const avatar13 = require('../../assets/images/photo13.jpg');
-  const avatar14 = require('../../assets/images/photo14.jpg');
-  const avatar15 = require('../../assets/images/photo15.jpg');
-  const avatar16 = require('../../assets/images/photo16.jpg');
-  const avatar17 = require('../../assets/images/photo17.jpg');
+interface Photo {
+  id: string;
+  source: number;
+}
+interface ChangeAvatarProps {
+  avatar: any;
+  onAvatarChange: (newAvatar: any) => void;
+}
 
+const ChangeAvatarScreen: React.FC = () => {
+  const ChangeAvatar: Photo[] = [
+    { id: 'photo1', source: require('../../assets/images/1.jpg') },
+    { id: 'photo2', source: require('../../assets/images/2.jpg') },
+    { id: 'photo3', source: require('../../assets/images/3.jpg') },
+    { id: 'photo4', source: require('../../assets/images/4.jpg') },
+    { id: 'photo5', source: require('../../assets/images/5.jpg') },
+    { id: 'photo6', source: require('../../assets/images/6.jpg') },
+    { id: 'photo7', source: require('../../assets/images/7.jpg') },
+    { id: 'photo8', source: require('../../assets/images/8.jpg') },
+    { id: 'photo9', source: require('../../assets/images/9.jpg') },
+    { id: 'photo10', source: require('../../assets/images/10.jpg') },
+    { id: 'photo11', source: require('../../assets/images/11.jpg') },
+    { id: 'photo12', source: require('../../assets/images/12.jpg') },
+    { id: 'photo13', source: require('../../assets/images/13.jpg') },
+    { id: 'photo14', source: require('../../assets/images/14.jpg') },
+    { id: 'photo15', source: require('../../assets/images/15.jpg') },
+    { id: 'photo16', source: require('../../assets/images/16.jpg') },
+    { id: 'photo17', source: require('../../assets/images/17.jpg') },
+    // 添加其他照片的信息
+  ];
 
-  
-  const handleListItemPress = (listItemName: string) => {
-    // 处理列表项点击事件
-    console.log(`点击了列表项: ${listItemName}`);
+  const [selectedPhotoId, setSelectedPhotoId] = useState<string | null>(null);
 
+  const handlePress = (photoId: string) => {
+    setSelectedPhotoId(photoId);
   };
 
+  const isPhotoSelected = (photoId: string) => {
+    return selectedPhotoId === photoId;
+  };
+
+  const navigation = useNavigation();
+
+  const onPressed = () => {
+    navigation.navigate('Profile' as never);
+  };
+
+  const windowWidth = Dimensions.get('window').width;
+  const imageWidth = (windowWidth - 20) / 3; // 计算每个图片的宽度
+  const placeholderItemCount = 3 - (ChangeAvatar.length % 3); // 计算占位元素数量
+
   return (
-    <View>
-      <ScrollView>
-        <View style={styles.container}>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar1} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar2} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar3} style={styles.avatar} />
-          </TouchableOpacity>
-        </View>
+    <View style={styles.container}>
+      <FlatList
+    data={ChangeAvatar}
+    numColumns={3} // 每行显示3个图像
+    keyExtractor={(item) => item.id}
+    renderItem={({ item: photo }) => (
+      <TouchableOpacity
+        onPress={() => handlePress(photo.id)}
+        activeOpacity={0.8}
+        style={styles.photoContainer}
+      >
+        <Image
+          source={photo.source}
+          style={[
+            styles.avatar,
+            isPhotoSelected(photo.id) && styles.avatarPressed,
+            { borderRadius: imageWidth / 2 },
+          ]}
+        />
+      </TouchableOpacity>
+    )}
+    ListFooterComponent={() => (
+      <View style={styles.photoContainer} />
+    )}
+  />
 
-        <View style={styles.container}>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar4} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar5} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar6} style={styles.avatar} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.container}>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar7} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar8} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar9} style={styles.avatar} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.container}>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar10} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar11} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar12} style={styles.avatar} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.container}>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar13} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar14} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar15} style={styles.avatar} />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.container}>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar16} style={styles.avatar} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={ChangeAvatar}>
-            <Image source={avatar17} style={styles.avatar} />
-          </TouchableOpacity>
-        </View>
+      <View style={styles.buttonContainer}>
+        <CustomButton text="confirm" onPress={onPressed} />
 
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button} onPress={HomeScreen}>
-            <Text style={styles.TextTitle}>取消</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={HomeScreen}>
-            <Text style={styles.TextTitle}>確認</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-    </View >
+        <CustomButton
+          text="Back to PersonalInfo"
+          onPress={onPressed}
+          type="TERTIARY"
+        />
+      </View>
+    </View>
   );
 };
 
@@ -118,51 +103,54 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     justifyContent: 'center',
+    flex: 1,
+  },
+
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+
+  },
+  photoContainer: {
+    width: '33.33%',
 
   },
   avatar: {
     width: 100,
     height: 100,
-    borderRadius: 25,
-    margin: 10,
+    margin: 5,
+    borderWidth: 2,
+    borderColor: 'transparent'
+  },
+  avatarPressed: {
+    borderWidth: 2,
+    borderColor: 'blue', // 点击后边框颜色为蓝色
+    width: 100,
+    height: 100,
+    margin: 5,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: -5,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#f0f0f0',
+  },
+  button: {
+    padding: 10,
+    backgroundColor: 'blue',
   },
   name: {
     marginLeft: 10,
     fontSize: 25,
     fontWeight: 'bold',
   },
-  separator: {
-    height: 3,
-    width: 350,
-    backgroundColor: 'black',
-    marginHorizontal: 20,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#f0f0f0',
-  },
-  button: {
-    padding: 10,
-    backgroundColor: 'blue',
-
-  },
-  forgotPasswordText: {
-    color: 'black',
+  Text: {
+    color: 'grey',
     fontSize: 16,
-  },
-  TextTitle: {
-    color: 'black',
-    fontSize: 16,
+    marginTop: 15,
   },
 });
 export default ChangeAvatarScreen;
