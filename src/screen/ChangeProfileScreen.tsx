@@ -1,16 +1,17 @@
-import { View, Text,TextInput, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, } from '@react-navigation/native';
 import CustomButton from '../components/CustomButton';
 import CustomInput from '../components/CustomInput';
 const ChangePprofileScreen = () => {
+  const avatarSource = require('../../assets/images/1.jpg');
   const [email, setEmail] = useState('');
 
   const navigation = useNavigation();
 
   //const API_URL = 'http://13.208.146.112:8000/api';
 
-  
+
   const onPressed = () => {
     navigation.navigate('Profile' as never);
   };
@@ -20,14 +21,16 @@ const ChangePprofileScreen = () => {
       <View style={styles.root}>
         <Text style={styles.title}>Reset your porfile</Text>
 
+        <Image source={avatarSource} style={styles.avatar} />
+
         <View style={styles.container}>
-            <TextInput placeholder="name"/>
+          <TextInput placeholder="name" />
         </View>
         <View style={styles.container}>
-            <TextInput placeholder="gender"/>
+          <TextInput placeholder="gender" />
         </View>
         <View style={styles.container}>
-            <TextInput placeholder="job_name"/>
+          <TextInput placeholder="job_name" />
         </View>
         {/* <CustomInput
           placeholder="name"
@@ -48,7 +51,7 @@ const ChangePprofileScreen = () => {
         <CustomButton text="Send" onPress={onPressed} />
 
         <CustomButton
-          text="Back to PersonalInfo"
+          text="Back to Profile"
           onPress={onPressed}
           type="TERTIARY"
         />
@@ -61,6 +64,11 @@ const styles = StyleSheet.create({
   root: {
     alignItems: 'center',
     padding: 20,
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: 25,
   },
   title: {
     fontSize: 24,
@@ -85,7 +93,7 @@ const styles = StyleSheet.create({
 
     paddingHorizontal: 10,
     marginVertical: 5,
-},
+  },
 });
 
 export default ChangePprofileScreen;
