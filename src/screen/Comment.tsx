@@ -1,21 +1,89 @@
-import React, { useEffect } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, FlatList, TextInput, Button } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { API_URL } from '../../config';
+
+const VerdictScreen = () => {
+  const navigation = useNavigation();
+  const [incidentType, setIncidentType] = useState('incident');
+  const [verdictData, setVerdictData] = useState(null);
+
+  useEffect(() => {
+    fetchVerdictData();
+  }, []);
+
+  const fetchVerdictData = async () => {
+    const accessToken = await AsyncStorage.getItem('access_token');
+    fetch(`${API_URL}/verdict/get_verdict/?verdict_id=1`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      }
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        setVerdictData(responseData.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  const handleToggleIncidentType = () => {
+    setIncidentType(incidentType === 'incident' ? 'incident_lite' : 'incident');
+  };
+
+  if (!verdictData) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
+
+  return (
+    <ScrollView style={styles.container}>
+      <TouchableOpacity onPress={handleToggleIncidentType}>
+        <Text style={styles.translationText}>
+          {incidentType === 'incident' ? '切換案件類型' : 'Switch Incident Type'}
+        </Text>
+      </TouchableOpacity>
+      
+      <View style={styles.verdictContainer}>
+        <Text style={styles.title}>判例標題:</Text>
+        <Text style={styles.verdictTitle}>{verdictData.title}</Text>
+      </View>
+      <View style={styles.verdictContainer}>
+        <Text style={styles.title}>判例內文:</Text>
+        <Text style={styles.verdictData}>{verdictData[incidentType]}</Text>
+      </View>
+      <CommentList />
+    </ScrollView>
+  );
+};
 
 const CommentItem = ({ comment }) => {
-
   return (
     <View style={styles.commentContainer}>
       <View style={styles.avatarContainer}>
         {/* 在這裡顯示頭像 */}
       </View>
       <View style={styles.commentContent}>
-        <Text style={styles.commentText}>{comment.content}</Text>
+        <Text style={styles.commentText}>{comment.comment}</Text>
         <View style={styles.likeDislikeContainer}>
-          <Text style={styles.likeDislikeText}>Like: {comment.like}</Text>
-          <Text style={styles.likeDislikeText}>Dislike: {comment.dislike}</Text>
         </View>
         <Button title="回覆" />
+        {comment.replies.length > 0 && (
+          <View style={styles.repliesContainer}>
+            {comment.replies.map((reply) => (
+              <View key={reply.reply_id} style={styles.replyContainer}>
+                <Text style={styles.replyText}>{reply.reply}</Text>
+                <Text style={styles.replyInfo}>{`By: ${reply.reply_email}`}</Text>
+                <Text style={styles.replyInfo}>{`Time: ${reply.reply_create_time}`}</Text>
+              </View>
+            ))}
+          </View>
+        )}
       </View>
     </View>
   );
@@ -23,62 +91,33 @@ const CommentItem = ({ comment }) => {
 
 const CommentList = () => {
   const navigation = useNavigation();
+  const [comments, setComments] = useState([]);
+
   useEffect(() => {
-    navigation.setOptions({
-      drawerLabel: () => null, // Hide the drawer label for this screen
-    });
-  }, [navigation]);
-
-  useEffect(
-    React.useCallback(() => {
-      const parentNavigation = navigation.getParent();
-      if (parentNavigation) {
-        parentNavigation.setOptions({
-          drawerLockMode: 'locked-closed', // Hide the drawer for this screen
+    const fetchComments = async () => {
+      try {
+        const accessToken = await AsyncStorage.getItem('access_token');
+        const response = await fetch(`${API_URL}/comment/get_comments/?verdict_id=1`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         });
+        const data = await response.json();
+        setComments(data.data);
+      } catch (error) {
+        console.error(error);
       }
+    };
 
-      return () => {
-        if (parentNavigation) {
-          parentNavigation.setOptions({
-            drawerLockMode: 'unlocked', // Restore drawer visibility when leaving this screen
-          });
-        }
-      };
-    }, [navigation])
-  );
-
-  const comments = [
-    {
-      id: 1,
-      content: '殺人又竊盜的，這應該要判死刑吧',
-      like: 5,
-      dislike: 2,
-    },
-    {
-      id: 2,
-      content: '判死刑不是唯一，犯人擁有精神疾病，可能需要先就醫評估精神狀況',
-      like: 3,
-      dislike: 1,
-    },
-    {
-      id: 3,
-      content: '這種人應與世隔絕！最好關到死！！',
-      like: 1,
-      dislike: 0,
-    },
-  ];
-
-  //   const handleReply = (commentId) => {
-  //     // 處理回覆按鍵的邏輯
-  //   };
+    fetchComments();
+  }, []);
 
   return (
-    <View style={styles.container}>
+    <View>
       <FlatList
         data={comments}
         renderItem={({ item }) => <CommentItem comment={item} />}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.comment_id.toString()}
       />
       <View style={styles.inputContainer}>
         <TextInput style={styles.input} placeholder="輸入留言..." />
@@ -91,7 +130,36 @@ const CommentList = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: 16,
+    backgroundColor: '#FFFFFF',
+  },
+  loadingText: {
+    fontSize: 16,
+    textAlign: 'center',
+    marginTop: 16,
+  },
+  translationText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 16,
+    textDecorationLine: 'underline', // 添加下划线效果
+  },
+  verdictContainer: {
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  verdictTitle: {
+    fontSize: 18,
+    lineHeight: 24,
+    fontWeight: 'bold',
+  },
+  verdictData: {
+    fontSize: 16,
+    lineHeight: 20,
   },
   commentContainer: {
     flexDirection: 'row',
@@ -119,6 +187,22 @@ const styles = StyleSheet.create({
   likeDislikeText: {
     marginRight: 10,
   },
+  repliesContainer: {
+    marginTop: 10,
+  },
+  replyContainer: {
+    backgroundColor: '#f0f0f0',
+    padding: 10,
+    marginBottom: 5,
+  },
+  replyText: {
+    fontSize: 14,
+    marginBottom: 5,
+  },
+  replyInfo: {
+    fontSize: 12,
+    color: 'gray',
+  },
   inputContainer: {
     flexDirection: 'row',
     marginTop: 10,
@@ -133,4 +217,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CommentList;
+export default VerdictScreen;
