@@ -54,7 +54,7 @@ const HomeScreen = () => {
 
   const renderArticleItem = ({ item }: { item: Article }) => {
     return (
-      <TouchableOpacity onPress={()=>navigation.navigate('Comment')}>
+      <TouchableOpacity onPress={()=>navigation.navigate('Comment' as never)}>
         <View style={{ marginBottom: 16 }}>
           <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
           <Text style={{ fontSize: 14 }}>{item.judgement_date}</Text>
