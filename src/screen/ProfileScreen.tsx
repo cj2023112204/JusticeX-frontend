@@ -1,105 +1,98 @@
-import * as React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { API_URL } from '../../config';
 
-const PorfileScreen = () => {
-  const avatarSource = require('../../assets/images/1.jpg'); // 替换为实际的头像图片路径
-  const name = 'John Doe'; // 替换为实际的姓名数据
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 
+const VerdictScreen = () => {
   const navigation = useNavigation();
-  const onPressed = () => {
-    navigation.navigate('Favorite' as never); // Remove unnecessary type casting
+  const [verdictData, setVerdictData] = useState<any>(null);
+  const [imageData, setImageData] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchVerdictData();
+  }, []);
+
+  const fetchVerdictData = async () => {
+    const accessToken = await AsyncStorage.getItem('access_token');
+    fetch(`${API_URL}/account/get_account/`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((responseData) => {
+        setVerdictData(responseData.data);
+        decodeImage(responseData.data.picture);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
-  const changeavatar = () => {
-    navigation.navigate('ChangeAvatar' as never); // Remove unnecessary type casting
+
+  const decodeImage = (base64Data: string) => {
+    const imageData = `data:image/jpeg;base64,${base64Data}`;
+    setImageData(imageData);
   };
-  const changepprofile = () => {
-    navigation.navigate('ChangePprofile' as never); // Remove unnecessary type casting
-  };
+
+  if (!verdictData) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
 
   return (
     <View>
-      <View style={styles.container}>
-        <TouchableOpacity onPress={changeavatar}>
-          <Image source={avatarSource} style={styles.avatar} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.name} onPress={changepprofile}>
-          <Text style={styles.name}>{name}</Text>
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.separator}></View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={changepprofile}>
-          <Text style={styles.TextTitle}>gender</Text>
-          <Text style={styles.Text}>F</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.button} onPress={changepprofile}>
-          <Text style={styles.TextTitle}>job_name</Text>
-          <Text style={styles.Text}>Teacher</Text>
-        </TouchableOpacity>
-
-        <View style={styles.separator}></View>
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.favoriteButton} onPress={onPressed}>
-          <Text style={styles.TextTitle}>favorite</Text>
-        </TouchableOpacity>
-      </View>
-
-    </View >
+      <Text style={styles.title}>判例标题:</Text>
+      <Text style={styles.verdictTitle}>{verdictData.email}</Text>
+      {imageData && <Image source={{ uri: imageData }} style={{ width: 200, height: 200 }} />}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 20,
-    justifyContent: 'center',
-
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#FFFFFF',
   },
-  Text: {
-    color: 'grey',
+  loadingText: {
     fontSize: 16,
-    marginTop: 15,
-  },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 25,
-  },
-  name: {
-    marginLeft: 10,
-    fontSize: 25,
-    fontWeight: 'bold',
-  },
-  separator: {
-    height: 3,
-    width: 350,
-    backgroundColor: 'black',
-    marginHorizontal: 20,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  buttonContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    textAlign: 'center',
+    marginTop: 16,
   },
   button: {
-    width: 350,
     paddingVertical: 10,
+    paddingHorizontal: 16,
+    backgroundColor: '#FF7043',
+    borderRadius: 4,
+    marginBottom: 16,
   },
-  favoriteButton: {
-    width: 350,
-    paddingVertical: 10,
-  },
-  TextTitle: {
-    color: 'black',
+  buttonText: {
+    color: '#FFFFFF',
+    fontWeight: 'bold',
     fontSize: 16,
+    textAlign: 'center',
+  },
+  verdictContainer: {
+    marginBottom: 16,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  verdictTitle: {
+    fontSize: 18,
+    lineHeight: 24,
+  },
+  verdictData: {
+    fontSize: 16,
+    lineHeight: 20,
   },
 });
-export default PorfileScreen;
+
+export default VerdictScreen;
