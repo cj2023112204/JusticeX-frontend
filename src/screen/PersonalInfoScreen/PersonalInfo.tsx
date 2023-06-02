@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import GenderSelector from '../../components/GenderSelector';
+import DatePicker from '../../components/DatePicker/DatePicker';
+import Selector from '../../components/Selector/Selector';
 import { useNavigation } from '@react-navigation/native';
 import { useRoute } from '@react-navigation/native';
 import { API_URL } from '../../../config';
@@ -48,7 +50,7 @@ const PersonalInfo = ({ route }: any) => {
               gender: gender,
               birth: birth,
               job_id: job_id,
-              picture_id: picture_id,
+              picture_id: '1',
             }),
           })
             .then((response) => response.json())
@@ -88,21 +90,24 @@ const PersonalInfo = ({ route }: any) => {
                     value={gender}
                     setValue={setGender}
                 />
+
+                {/* <DatePicker/> */}
                 <CustomInput
                     placeholder="Birth"
                     value={birth}
                     setValue={setBirth}
                 />
+                {/* <Selector/> */}
                 <CustomInput
                     placeholder="JobId"
                     value={job_id}
                     setValue={setJob_id}
                 />
-                <CustomInput
+                {/* <CustomInput
                     placeholder="Picture"
                     value={picture_id}
                     setValue={setPicture_id}
-                />
+                /> */}
 
                 <CustomButton text="Register" onPress={onRegisterPressed} />
 

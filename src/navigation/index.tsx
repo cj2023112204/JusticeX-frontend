@@ -19,6 +19,7 @@ import FavoriteScreen from "../screen/FavoriteScreen";
 import HomeScreen from '../screen/HomeScreen';
 import Article from '../screen/Article';
 import Comment from '../screen/Comment';
+import SignOut from '../SignOut';
 import React, { useLayoutEffect } from 'react';
 
 const Drawer = createDrawerNavigator();
@@ -47,6 +48,7 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="首頁" component={HomeStack} />
       <Drawer.Screen name="個人資料" component={ProfileScreen} />
       <Drawer.Screen name="收藏" component={FavoriteScreen} />
+      <Drawer.Screen name='登出' component={SignOut}/>
     </Drawer.Navigator>
   )
 }
@@ -56,8 +58,8 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         
-        <Stack.Screen name='Quiz' component={QuizScreen} />
         <Stack.Screen name='SignIn' component={SignInScreen} />
+        <Stack.Screen name='Quiz' component={QuizScreen} />
         <Stack.Screen name='Home' component={DrawerNavigation} />
         <Stack.Screen name='SignUp' component={SignUpScreen} />
         <Stack.Screen name='ConfirmEmail' component={ConfirmEmailScreen} />
@@ -79,4 +81,3 @@ const Navigation = () => {
 
 export default Navigation;
 
-export default Navigation;

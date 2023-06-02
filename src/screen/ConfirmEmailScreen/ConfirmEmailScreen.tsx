@@ -64,7 +64,34 @@ const ConfirmEmailScreen = ({ route }: any) => {
     };
 
     const onResendPressed = () => {
-        console.warn("onResendPressed");
+        fetch(`${API_URL}/auth/send_code/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: email,
+              is_forgot_password: false,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle response data
+              //setUsername(data)
+              //setPassword(data)
+              if(data.success===true){
+                console.log(data.message)
+              }else{
+                console.log('error')
+              }
+              console.log(data)
+              //navigation.navigate('ConfirmEmail' as never, { email: email, password: password }as never);
+
+            })
+            .catch((error) => {
+              // Handle error
+              console.error(error);
+            });
     };
 
     return (
