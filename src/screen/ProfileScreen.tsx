@@ -55,18 +55,15 @@ const VerdictScreen = () => {
       </View>
     );
   }
- 
 
   return (
     <View>
       <View style={styles.container}>
-      <TouchableOpacity onPress={changeprofile}>
-        {imageData && <Image source={{ uri: imageData }} style={[
-          styles.avatar, { borderRadius: imageWidth / 2 },
-        ]} />}
+        <TouchableOpacity onPress={changeprofile}>
+          {imageData && <Image source={{ uri: imageData }} style={[styles.avatar, { borderRadius: imageWidth / 2 }]} />}
         </TouchableOpacity>
         <TouchableOpacity style={styles.name} onPress={changeprofile}>
-        <Text style={styles.verdictTitle}>{verdictData.name}</Text>
+          <Text style={styles.verdictTitle}>{verdictData.name}</Text>
         </TouchableOpacity>
       </View>
 
@@ -102,7 +99,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 20,
     justifyContent: 'center',
-
   },
   loadingText: {
     fontSize: 16,
@@ -117,7 +113,6 @@ const styles = StyleSheet.create({
   avatar: {
     width: 100,
     height: 100,
-
   },
   name: {
     marginLeft: 10,
