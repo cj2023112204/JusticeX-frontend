@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
-import SearchBar from "react-native-dynamic-search-bar";
+import { FlatList,Platform, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import Article from './Article';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CommentList from './Comment';
 import { API_URL } from '../../config';
 
 interface Article {
   verdict_id: number;
   title: string;
   judgement_date: string;
+  total_like: number;
+  total_comment: number;
+  crime_type: string;
 }
 
 const FavoriteScreen = () => {
@@ -35,7 +36,8 @@ const FavoriteScreen = () => {
         .then(response => response.json())
         .then(responseData => {
           const data = responseData.data;
-          setArticles(prevArticles => [...prevArticles, ...data]);
+          const uniqueData = data.filter((item: Article) => !articles.some(article => article.verdict_id === item.verdict_id));
+          setArticles(prevArticles => [...prevArticles, ...uniqueData]);
         })
         .catch(error => {
           console.error(error);
@@ -44,16 +46,24 @@ const FavoriteScreen = () => {
     checkLoginStatus();
   };
 
+
   const filteredArticles = articles.filter(article =>
     article.title.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const renderArticleItem = ({ item }: { item: Article }) => {
     return (
-      <TouchableOpacity onPress={() => navigation.navigate('Comment' as never)}>
-        <View style={{ marginBottom: 16 }}>
+      <TouchableOpacity onPress={() => navigation.navigate('Comment', { verdictId: item.verdict_id })}>
+        <View style={styles.articleContainer}>
           <Text style={{ fontSize: 18, fontWeight: 'bold' }}>{item.title}</Text>
           <Text style={{ fontSize: 14 }}>{item.judgement_date}</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 8 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ marginRight: 8 }}>Like: {item.total_like}</Text>
+              <Text>Comment: {item.total_comment}</Text>
+            </View>
+            <Text style={styles.crimeTypeLabel}>{item.crime_type}</Text>
+          </View>
         </View>
       </TouchableOpacity>
     );
@@ -75,65 +85,70 @@ const FavoriteScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    padding: 16,
   },
-  searchbar: {
-    height: 56,
-    width: '100%',
-  },
-  categoryBar: {
+  categoryContainer: {
     flexDirection: 'row',
-    backgroundColor: '#eee',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  categoryButtonText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: 'gray',
+    justifyContent: 'space-between',
+    marginBottom: 16,
   },
   categoryButton: {
-    paddingHorizontal: 15,
-    paddingVertical: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    backgroundColor: '#f0f0f0',
   },
   activeCategoryButton: {
-    backgroundColor: '#fff',
-    borderBottomWidth: 2,
-    borderBottomColor: 'black',
+    backgroundColor: '#2196F3',
+  },
+  categoryButtonText: {
+    color: '#666',
   },
   activeCategoryButtonText: {
-    color: 'black',
+    color: '#fff',
   },
-  paginationContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+  searchBar: {
+    marginBottom: 16,
+  },
+  articleListContainer: {
+    paddingBottom: 16,
+  },
+  loadMoreButton: {
     alignItems: 'center',
-    marginVertical: 10,
+    padding: 16,
   },
-  paginationButton: {
-    backgroundColor: '#eee',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginHorizontal: 5,
-    borderRadius: 5,
-  },
-  activePaginationButton: {
-    backgroundColor: 'black',
-  },
-  paginationButtonText: {
+  loadMoreButtonText: {
+    color: '#2196F3',
     fontSize: 16,
+  },
+  crimeTypeLabel: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#2196F3',
+    borderRadius: 4,
+    color: '#fff',
     fontWeight: 'bold',
-    color: 'black',
+    fontSize: 12,
+    alignSelf: 'flex-start',
+    marginTop: 4,
   },
-  pageNumberButton: {
-    width: 30,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
+  articleContainer: {
+    marginBottom: 16,
   },
-  pageNumberText: {
-    color: 'white',
+  separator: {
+    height: StyleSheet.hairlineWidth,
+    width: '100%',
+    backgroundColor: '#ccc',
+    ...Platform.select({
+      ios: {
+        marginLeft: 16,
+      },
+      android: {
+        paddingLeft: 16,
+      },
+    }),
   },
 });
+
 
 export default FavoriteScreen;
