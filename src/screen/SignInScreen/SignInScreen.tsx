@@ -55,15 +55,28 @@ const SignInScreen = () => {
           console.log(data.access_token)
           const saveData = async (key: string, value: any) => {
             try {
-              await AsyncStorage.setItem(key, value);
+              const stringValue = value.toString();
+              await AsyncStorage.setItem(key, stringValue);
               console.log('Data saved successfully');
               setLoggedIn(true);
-              navigation.navigate('Home' as never);
+              checkis_status();
+              //navigation.navigate('Home' as never);
             } catch (error) {
               console.error('Error saving data:', error);
             }
           };
+          // const saveQuiz = async (key: string, value: any) => {
+          //   try {
+          //     await AsyncStorage.setItem(key, value.toString());
+          //     console.log('Data saved successfully');
+          //     //setLoggedIn(true);
+          //     //navigation.navigate('Home' as never);
+          //   } catch (error) {
+          //     console.error('Error saving data:', error);
+          //   }
+          // };
           saveData('access_token', data.access_token);
+          saveData('is_quiz', data.is_quiz);
         } else {
           console.log(data.message)
           console.log('Please re-enter your password.');
@@ -71,6 +84,24 @@ const SignInScreen = () => {
         console.log(data)
         console.log(data.success)
         //navigation.navigate('Home' as never);
+        const checkis_status = async () => { 
+          const access_token = await AsyncStorage.getItem('access_token')
+          const is_quiz = await AsyncStorage.getItem('is_quiz')
+
+          if (access_token?.length && is_quiz === 'true' ){
+            console.log(data.is_quiz)
+            navigation.navigate('Home' as never);
+          }else if(access_token?.length && is_quiz !== 'true'){
+            console.log(data.is_quiz)
+            navigation.navigate('Quiz' as never, { access_token: access_token } as never);
+          }else{
+            console.log(data.is_quiz)
+            navigation.navigate('SignIn' as never);
+          }
+        }
+        
+        
+
       })
       .catch((error) => {
         // Handle error
@@ -131,7 +162,7 @@ const SignInScreen = () => {
           type="TERTIARY"
         />
 
-        {loggedIn && <Text>You are logged in.</Text>}
+        {/* {loggedIn && <Text>You are logged in.</Text>} */}
 
       </View>
     </ScrollView>
