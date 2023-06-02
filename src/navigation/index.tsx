@@ -14,12 +14,11 @@ import QuizScreen from '../screen/QuizScreen'
 import ProfileScreen from "../screen/ProfileScreen";
 import ChangePasswordScreen from '../screen/ChangePasswordScreen';
 import ChangeAvatarScreen from "../screen/ChangeAvatarScreen";
-import ChangePprofileScreen from "../screen/ChangeProfileScreen";
+import ChangeProfileScreen from "../screen/ChangeProfileScreen";
 import FavoriteScreen from "../screen/FavoriteScreen";
 import HomeScreen from '../screen/HomeScreen';
 import Article from '../screen/Article';
 import Comment from '../screen/Comment';
-import SignOut from '../SignOut';
 import React, { useLayoutEffect } from 'react';
 
 const Drawer = createDrawerNavigator();
@@ -48,7 +47,6 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="首頁" component={HomeStack} />
       <Drawer.Screen name="個人資料" component={ProfileScreen} />
       <Drawer.Screen name="收藏" component={FavoriteScreen} />
-      <Drawer.Screen name='登出' component={SignOut}/>
     </Drawer.Navigator>
   )
 }
@@ -58,8 +56,8 @@ const Navigation = () => {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         
+        {/* <Stack.Screen name='Quiz' component={QuizScreen} /> */}
         <Stack.Screen name='SignIn' component={SignInScreen} />
-        <Stack.Screen name='Quiz' component={QuizScreen} />
         <Stack.Screen name='Home' component={DrawerNavigation} />
         <Stack.Screen name='SignUp' component={SignUpScreen} />
         <Stack.Screen name='ConfirmEmail' component={ConfirmEmailScreen} />
@@ -67,8 +65,8 @@ const Navigation = () => {
         <Stack.Screen name='ResetPassword' component={ResetPasswordScreen} />
         <Stack.Screen name='PersonalInfo' component={PersonalInfoScreen} />
         <Stack.Screen name='ChangePassword' component={ChangePasswordScreen} />
-        <Stack.Screen name='ChangeAvatar' component={ChangeAvatarScreen} options={{ title: '更改頭貼' , headerShown: true}}/>
-        <Stack.Screen name='ChangePprofile' component={ChangePprofileScreen} options={{ title: '更改個人資料' , headerShown: true}} />
+        <Stack.Screen name='ChangeProfile' component={ChangeProfileScreen} />
+        <Stack.Screen name='ChangeAvatar' component={ChangeAvatarScreen} />
         <Stack.Screen name='Favorite' component={FavoriteScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
@@ -81,3 +79,4 @@ const Navigation = () => {
 
 export default Navigation;
 
+export default Navigation;

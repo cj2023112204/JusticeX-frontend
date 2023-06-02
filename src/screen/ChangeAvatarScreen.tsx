@@ -4,6 +4,7 @@ import { View, Text, Dimensions, Image, StyleSheet, FlatList, TouchableOpacity }
 import HomeScreen from "./HomeScreen";
 import ChangeAvatar from "./ChangeAvatarScreen";
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import CustomButton from '../components/CustomButton';
 
 interface Photo {
@@ -17,23 +18,23 @@ interface Photo {
 
 const ChangeAvatarScreen: React.FC = () => {
   const ChangeAvatar: Photo[] = [
-    { id: 'photo1', source: require('../../assets/images/1.jpg') },
-    { id: 'photo2', source: require('../../assets/images/2.jpg') },
-    { id: 'photo3', source: require('../../assets/images/3.jpg') },
-    { id: 'photo4', source: require('../../assets/images/4.jpg') },
-    { id: 'photo5', source: require('../../assets/images/5.jpg') },
-    { id: 'photo6', source: require('../../assets/images/6.jpg') },
-    { id: 'photo7', source: require('../../assets/images/7.jpg') },
-    { id: 'photo8', source: require('../../assets/images/8.jpg') },
-    { id: 'photo9', source: require('../../assets/images/9.jpg') },
-    { id: 'photo10', source: require('../../assets/images/10.jpg') },
-    { id: 'photo11', source: require('../../assets/images/11.jpg') },
-    { id: 'photo12', source: require('../../assets/images/12.jpg') },
-    { id: 'photo13', source: require('../../assets/images/13.jpg') },
-    { id: 'photo14', source: require('../../assets/images/14.jpg') },
-    { id: 'photo15', source: require('../../assets/images/15.jpg') },
-    { id: 'photo16', source: require('../../assets/images/16.jpg') },
-    { id: 'photo17', source: require('../../assets/images/17.jpg') },
+    { id: '1', source: require('../../assets/images/1.jpg') },
+    { id: '2', source: require('../../assets/images/2.jpg') },
+    { id: '3', source: require('../../assets/images/3.jpg') },
+    { id: '4', source: require('../../assets/images/4.jpg') },
+    { id: '5', source: require('../../assets/images/5.jpg') },
+    { id: '6', source: require('../../assets/images/6.jpg') },
+    { id: '7', source: require('../../assets/images/7.jpg') },
+    { id: '8', source: require('../../assets/images/8.jpg') },
+    { id: '9', source: require('../../assets/images/9.jpg') },
+    { id: '10', source: require('../../assets/images/10.jpg') },
+    { id: '11', source: require('../../assets/images/11.jpg') },
+    { id: '12', source: require('../../assets/images/12.jpg') },
+    { id: '13', source: require('../../assets/images/13.jpg') },
+    { id: '14', source: require('../../assets/images/14.jpg') },
+    { id: '15', source: require('../../assets/images/15.jpg') },
+    { id: '16', source: require('../../assets/images/16.jpg') },
+    { id: '17', source: require('../../assets/images/17.jpg') },
     // 添加其他照片的信息
   ];
 
@@ -50,9 +51,8 @@ const ChangeAvatarScreen: React.FC = () => {
   const navigation = useNavigation();
 
   const onPressed = () => {
-    navigation.navigate('Profile' as never);
+    navigation.navigate('ChangeProfile' as never, { picture_Id: selectedPhotoId }as never );
   };
-
   const windowWidth = Dimensions.get('window').width;
   const imageWidth = (windowWidth - 20) / 3; // 计算每个图片的宽度
   const placeholderItemCount = 3 - (ChangeAvatar.length % 3); // 计算占位元素数量
@@ -86,9 +86,9 @@ const ChangeAvatarScreen: React.FC = () => {
         
       />
 
-      {/* <View style={styles.buttonContainer}>
-        <CustomButton text="confirm" onPress={onPressed} />
-      </View> */}
+      <View style={styles.buttonContainer}>
+        <CustomButton text="確定" onPress={onPressed} />
+      </View>
     </View>
   );
 };
