@@ -77,7 +77,7 @@ const PersonalInfo = ({ route }: any) => {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.root}>
-                <Text style={styles.title}>Personal Information</Text>
+                <Text style={styles.title}>個人資訊</Text>
 
                 <CustomInput
                     placeholder="Name"
@@ -109,7 +109,7 @@ const PersonalInfo = ({ route }: any) => {
                     setValue={setPicture_id}
                 /> */}
 
-                <CustomButton text="Register" onPress={onRegisterPressed} />
+                <CustomButton text="註冊" onPress={onRegisterPressed} />
 
                 {/* <Text style={styles.text}>
                     By registering, you confirm that you accept our{' '}
