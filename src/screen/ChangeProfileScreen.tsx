@@ -16,11 +16,11 @@ const VerdictScreen = () => {
   
 
   // const { email }: any = route.params;
-  const [name, setname] = useState('Sharron');
-  const [gender, setgender] = useState('F');
-  const [job_name, setJob_name] = useState('教師');
+  const [name, setname] = useState(null);
+  const [gender, setgender] = useState(null);
+  const [job_name, setJob_name] = useState(null);
   const [job_id, setjob_id] = useState(12);
-  const [picture_id, setpicture_id] = useState(2);
+  const [picture_id, setpicture_id] = useState(1);
 
   const onPressed = async () => {
     // console.warn('onSubmitPressed');
@@ -49,7 +49,8 @@ const VerdictScreen = () => {
           console.log('error')
         }
         console.log(data)
-        navigation.goBack();
+        fetchVerdictData(); // 重新获取数据
+        navigation.goBack(); // 返回上一页
       })
       .catch((error) => {
         // Handle error
@@ -61,8 +62,8 @@ const VerdictScreen = () => {
   const changeavatar = () => {
     navigation.navigate('ChangeAvatar' as never); // Remove unnecessary type casting
   };
-  const changeprofile = () => {
-    navigation.navigate('ChangeProfile' as never); // Remove unnecessary type casting
+  const backProfile = () => {
+    navigation.goBack();
   };
 
   useEffect(() => {
@@ -80,6 +81,9 @@ const VerdictScreen = () => {
       .then((responseData) => {
         setVerdictData(responseData.data);
         decodeImage(responseData.data.picture);
+        setname(responseData.data.name); // 设置初始值
+        setgender(responseData.data.gender); // 设置初始值
+        setJob_name(responseData.data.job_name); // 设置初始值
       })
       .catch((error) => {
         console.error(error);
@@ -124,38 +128,14 @@ const VerdictScreen = () => {
           value={job_name}
           setValue={setJob_name}
         />
-        {/* <View style={styles.container}>
-          <TextInput
-            style={styles.verdictTitle}
-            value={verdictData.name}
-            setValue={setname}
-          />
-        </View> */}
-
-        {/* <View style={styles.container}>
-          <TextInput style={styles.verdictTitle}>{verdictData.gender}</TextInput>
-        </View>
-
-        <View style={styles.container}> */}
-        {/* <TextInput style={styles.verdictTitle}>{verdictData.job_name}
-            value={job_name}
-            setValue={setJob_name}
-          </TextInput> */}
-
-        {/* <TextInput
-            style={styles.verdictTitle}>{verdictData.gender}
-            // placeholder={verdictData.job_name}
-            value={job_name}
-            onChangeText={setJob_name}
-          </TextInput> */}
-        {/* </View> */}
+        
         <CustomButton text="Send" onPress={onPressed} />
 
-        {/* <CustomButton
+        <CustomButton
           text="Back to Profile"
-          onPress={onPressed}
+          onPress={backProfile}
           type="TERTIARY"
-        /> */}
+        />
       </View>
     </ScrollView >
   );
