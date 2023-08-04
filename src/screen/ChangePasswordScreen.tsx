@@ -13,45 +13,45 @@ const ChangePprofileScreen = () => {
   //const API_URL = 'http://13.208.146.112:8000/api';
 
   const [email, setname] = useState('11136018@ntub.edu.tw');
-  const [password, setPassword] = useState('11136018');
+  const [password, setPassword] = useState('');
+  const [repassword, resetPassword] = useState('');
   const navigation = useNavigation();
+  const [errorMessage, setErrorMessage] = useState<string>('');
   
   //const API_URL = 'http://13.208.146.112:8000/api';
 
-  const onChangePw = async() => {
-      // console.warn('onSubmitPressed');
+  const onChangePw = async () => {
+    if (password === repassword) {
       const accessToken = await AsyncStorage.getItem('access_token');
       fetch(`${API_URL}/account/change_password/`, {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify({
-            email: email,
-            password: password,
-          }),
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success === true) {
+            console.log(data.message);
+          } else {
+            console.log('error');
+          }
+          console.log(data);
+          navigation.goBack();
         })
-          .then((response) => response.json())
-          .then((data) => {
-            // Handle response data
-            //setUsername(data)
-            //setPassword(data)
-            if(data.success===true){
-              console.log(data.message)
-            }else{
-              console.log('error')
-            }
-            console.log(data)
-            navigation.goBack();
-          })
-          .catch((error) => {
-            // Handle error
-            console.error(error);
-          });
-
-      //navigation.navigate('SignIn' as never);
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      setErrorMessage('請輸入相同的密碼');
+    }
   };
+
   const onPressed = () => {
     navigation.goBack();
   };
@@ -59,44 +59,27 @@ const ChangePprofileScreen = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
-        <Text style={styles.title}>Reset your change password</Text>
+        <Text style={styles.title}>更改密碼</Text>
 
         {/* <View style={styles.container}>
             <TextInput placeholder="new password"/>
         </View> */}
         <CustomInput
-          placeholder="new password"
+          placeholder="請輸入新密碼"
           value={password}
           setValue={setPassword}
         />
         <CustomInput
-          placeholder="reconfirm password"
-          value={password}
-          setValue={setPassword}
+          placeholder="請再次輸入密碼"
+          value={repassword}
+          setValue={resetPassword}
         />
-        {/* <View style={styles.container}>
-            <TextInput placeholder="reconfirm password"/>
-        </View> */}
-        {/* <CustomInput
-          placeholder="name"
-          value={email}
-          setValue={setEmail}
-        />
-        <CustomInput
-          placeholder="gender"
-          value={email}
-          setValue={setEmail}
-        />
-        <CustomInput
-          placeholder="job_name"
-          value={email}
-          setValue={setEmail}
-        /> */}
+        {errorMessage !== '' && <Text style={styles.error}>{errorMessage}</Text>}
 
-        <CustomButton text="Send" onPress={onChangePw} />
+        <CustomButton text="確定" onPress={onChangePw} />
 
         <CustomButton
-          text="Back to Profile"
+          text="返回"
           onPress={onPressed}
           type="TERTIARY"
         />
@@ -117,6 +100,10 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   text: {
+    color: 'gray',
+    marginVertical: 10,
+  },
+  error: {
     color: 'gray',
     marginVertical: 10,
   },
