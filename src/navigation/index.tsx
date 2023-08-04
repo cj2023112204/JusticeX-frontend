@@ -70,13 +70,12 @@ const Navigation = () => {
         <Stack.Screen name='Favorite' component={FavoriteScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
+        <Stack.Screen name='Quiz' component={QuizScreen}/>
         <Stack.Screen name="Comment" component={Comment} options={{ title: '判例詳情' , headerShown: true}} />
         <Stack.Screen name="Article" component={Article} options={{ title: '文章詳情' , headerShown: true}} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 };
-
-export default Navigation;
 
 export default Navigation;
