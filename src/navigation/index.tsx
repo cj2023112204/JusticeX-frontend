@@ -74,6 +74,7 @@ const Navigation = () => {
         <Stack.Screen name='Favorite' component={FavoriteScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
+        <Stack.Screen name='Quiz' component={QuizScreen}/>
         <Stack.Screen name="Comment" component={Comment} options={{ title: '判例詳情' , headerShown: true}} />
         <Stack.Screen name="Article" component={Article} options={{ title: '文章詳情' , headerShown: true}} />
       </Stack.Navigator>
@@ -81,5 +82,9 @@ const Navigation = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Navigation;
 
+=======
+export default Navigation;
+>>>>>>> 7e21d68c33fa770116f2006c839c5c6033fb6e69

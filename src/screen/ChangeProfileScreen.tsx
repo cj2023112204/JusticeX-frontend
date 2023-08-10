@@ -6,6 +6,28 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { View, Dimensions, TextInput, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 
+const ChangeAvatar = [
+  { id: '1', source: require('../../assets/images/1.jpg') },
+  { id: '2', source: require('../../assets/images/2.jpg') },
+  { id: '3', source: require('../../assets/images/11.jpg') },
+  { id: '4', source: require('../../assets/images/12.jpg') },
+  { id: '5', source: require('../../assets/images/13.jpg') },
+  { id: '6', source: require('../../assets/images/14.jpg') },
+  { id: '7', source: require('../../assets/images/15.jpg') },
+  { id: '8', source: require('../../assets/images/16.jpg') },
+  { id: '9', source: require('../../assets/images/17.jpg') },
+  { id: '10', source: require('../../assets/images/3.jpg') },
+  { id: '11', source: require('../../assets/images/4.jpg') },
+  { id: '12', source: require('../../assets/images/5.jpg') },
+  { id: '13', source: require('../../assets/images/6.jpg') },
+  { id: '14', source: require('../../assets/images/7.jpg') },
+  { id: '15', source: require('../../assets/images/8.jpg') },
+  { id: '16', source: require('../../assets/images/9.jpg') },
+  { id: '17', source: require('../../assets/images/10.jpg') },
+
+
+  // 添加其他照片的信息
+];
 
 const VerdictScreen = () => {
   const navigation = useNavigation();
@@ -13,14 +35,27 @@ const VerdictScreen = () => {
   const [imageData, setImageData] = useState<string | null>(null);
   const windowWidth = Dimensions.get('window').width;
   const imageWidth = (windowWidth - 20) / 3;
-  
+  const [selectedAvatar, setSelectedAvatar] = useState<string>('');
+  const [showAvatarOptions, setShowAvatarOptions] = useState(false);
+
+  const handleAvatarSelection = (id: string) => {
+    setSelectedAvatar(id);
+    setpicture_id(id); // Update the picture_id state with the selected avatar ID
+    setShowAvatarOptions(false); // Hide the avatar options list
+  };
+
+  const toggleAvatarOptions = () => {
+    setShowAvatarOptions(!showAvatarOptions);
+  };
+
+
 
   // const { email }: any = route.params;
-  const [name, setname] = useState(null);
-  const [gender, setgender] = useState(null);
-  const [job_name, setJob_name] = useState(null);
-  const [job_id, setjob_id] = useState(12);
-  const [picture_id, setpicture_id] = useState(1);
+  const [name, setname] = useState<string | null>(null);
+  const [gender, setgender] = useState<string | null>(null);
+  const [job_name, setJob_name] = useState<string | null>(null);
+  const [job_id, setjob_id] = useState<number>(12);
+  const [picture_id, setpicture_id] = useState<string| null>(null);
 
   const onPressed = async () => {
     // console.warn('onSubmitPressed');
@@ -107,11 +142,54 @@ const VerdictScreen = () => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
         <Text style={styles.title}>更改個人資料</Text>
+<<<<<<< HEAD
         <TouchableOpacity >
           {imageData && <Image source={{ uri: imageData }} style={[
             styles.avatar, { borderRadius: imageWidth / 2 },
           ]} />}
         </TouchableOpacity>
+=======
+        {/* 頭像顯示 */}
+        <View style={styles.selectedAvatarContainer}>
+          {selectedAvatar ? (
+            <TouchableOpacity
+              style={styles.toggleButton}
+              onPress={() => setShowAvatarOptions(!showAvatarOptions)}
+            >
+              <Image
+                source={ChangeAvatar.find((avatar) => avatar.id === selectedAvatar)?.source}
+                style={styles.selectedAvatar}
+              />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.toggleButton}
+              onPress={() => setShowAvatarOptions(!showAvatarOptions)}
+            >
+              {imageData && <Image source={{ uri: imageData }} style={[
+                styles.avatar, { borderRadius: imageWidth / 2 },
+              ]} />}
+            </TouchableOpacity>
+          )}
+        </View>
+        {/* 頭像選項列表 */}
+        {showAvatarOptions && (
+          <View style={styles.avatarOptionsContainer}>
+            {ChangeAvatar.map((avatar) => (
+              <TouchableOpacity
+                key={avatar.id}
+                style={[
+                  styles.avatarOption,
+                  selectedAvatar === avatar.id && styles.selectedAvatarOption,
+                ]}
+                onPress={() => handleAvatarSelection(avatar.id)}
+              >
+                <Image source={avatar.source} style={styles.avatarOptionImage} />
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+>>>>>>> 7e21d68c33fa770116f2006c839c5c6033fb6e69
 
         <CustomInput
           placeholder={verdictData.name}
@@ -128,7 +206,11 @@ const VerdictScreen = () => {
           value={job_name}
           setValue={setJob_name}
         />
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> 7e21d68c33fa770116f2006c839c5c6033fb6e69
         <CustomButton text="確定" onPress={onPressed} />
 
         <CustomButton
@@ -153,6 +235,46 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginVertical: 5,
 
+  },
+  avatarOptionsContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  avatarOption: {
+    width: 80,
+    height: 80,
+    margin: 10,
+    borderWidth: 2,
+    borderColor: 'transparent',
+    borderRadius: 40,
+    overflow: 'hidden',
+  },
+  selectedAvatarOption: {
+    borderColor: 'blue',
+  },
+  avatarOptionImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  selectedAvatarContainer: {
+    marginTop: 40,
+  },
+  selectedAvatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    resizeMode: 'cover',
+  },
+  toggleButton: {
+    borderRadius: 5,
+  },
+  toggleButtonText: {
+    color: 'black',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   root: {
     alignItems: 'center',

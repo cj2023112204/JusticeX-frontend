@@ -8,10 +8,13 @@ import {
   FlatList,
   TextInput,
   Button,
+  Pressable,
+  Animated,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { API_URL } from '../../config';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const VerdictScreen = () => {
   const navigation = useNavigation();
@@ -108,12 +111,45 @@ const VerdictScreen = () => {
       // Refresh likes count
       fetchVerdictData();
 
-      if (data.is_liked) {
+      if (data.success === "ture") {
         // Like was successful
         setLiked(true);
       } else {
         // Like was canceled
         setLiked(false);
+        handleUnlikeVerdict();
+        console.log("取消讚");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleUnlikeVerdict = async () => {
+    // Call the API to unlike the verdict
+    try {
+      const accessToken = await AsyncStorage.getItem('access_token');
+      const url = `${API_URL}/verdict/unlike_verdict/`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          verdict_id: verdictId,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+
+      // Refresh likes count
+      fetchVerdictData();
+
+      if (data.success === "true") {
+        // Unlike was successful
+        setLiked(false);
+      } else {
       }
     } catch (error) {
       console.error(error);
@@ -174,9 +210,20 @@ const VerdictScreen = () => {
       <View style={styles.separator}></View>
 
       <View style={styles.likesCommentsContainer}>
-        <TouchableOpacity onPress={handleLikeVerdict}>
-          <Text style={[styles.likeButton, liked ? { color: 'white' } : null]}>❤️ Like</Text>
-        </TouchableOpacity>
+        <Pressable onPress={() => setLiked((isLiked) => !isLiked)}>
+          <Animated.View
+            style={[
+              StyleSheet.absoluteFillObject,
+              { transform: [{ scale: liked ? 0 : 1 }] },
+            ]}
+          >
+            <MaterialCommunityIcons name={"heart-outline"} size={32} color={"black"} />
+          </Animated.View>
+
+          <Animated.View style={[{ transform: [{ scale: liked ? 1 : 0 }] }]}>
+            <MaterialCommunityIcons name={"heart"} size={32} color={"red"} />
+          </Animated.View>
+        </Pressable>
         <Text style={styles.likesCount}>{likesCount} likes</Text>
         <Text style={styles.commentsCount}>{commentsCount} comments</Text>
         <TouchableOpacity onPress={handleBookmarkVerdict}>
