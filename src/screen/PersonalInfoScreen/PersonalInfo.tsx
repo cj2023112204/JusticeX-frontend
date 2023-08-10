@@ -49,7 +49,7 @@ const PersonalInfo = ({ route }: any) => {
               password: route.params.password,
               gender: gender,
               birth: birth,
-              job_id: job_id,
+              job_id: '11',
               picture_id: '1',
             }),
           })
@@ -98,11 +98,11 @@ const PersonalInfo = ({ route }: any) => {
                     setValue={setBirth}
                 />
                 {/* <Selector/> */}
-                <CustomInput
+                {/* <CustomInput
                     placeholder="JobId"
                     value={job_id}
                     setValue={setJob_id}
-                />
+                /> */}
                 {/* <CustomInput
                     placeholder="Picture"
                     value={picture_id}

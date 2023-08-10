@@ -18,6 +18,8 @@ const VerdictScreen = () => {
   const route = useRoute();
   const verdictId = route.params?.verdictId; // Access the verdictId parameter from the route
   const [incidentType, setIncidentType] = useState('incident');
+    const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState('');
   const [verdictData, setVerdictData] = useState(null);
   const [likesCount, setLikesCount] = useState(0);
   const [commentsCount, setCommentsCount] = useState(0);
@@ -48,6 +50,20 @@ const VerdictScreen = () => {
 
   const handleToggleIncidentType = () => {
     setIncidentType(incidentType === 'incident' ? 'incident_lite' : 'incident');
+  };
+  const fetchComments = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem('access_token');
+      const response = await fetch(`${API_URL}/comment/get_comments/?verdict_id=${verdictId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      setComments(data.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCommentSubmit = async (comment) => {
@@ -140,7 +156,11 @@ const VerdictScreen = () => {
     <View style={styles.container}>
       <View style={styles.verdictContainer}>
         <Text style={styles.verdictTitle}>{verdictData.title}</Text>
+        <Text style={styles.verdictData}>{verdictData.judgement_date}</Text>
         <Text style={styles.verdictData}>{verdictData[incidentType]}</Text>
+        <Text style={styles.crimeTypeLabel}>{verdictData.crime_type}</Text>
+        <Text style={styles.verdictData}>{verdictData.judgement_date}</Text>
+        <Text style={styles.verdictData}>{verdictData.laws}</Text>
       </View>
 
       <View style={styles.separator}></View>
@@ -180,6 +200,7 @@ const CommentItem = ({ comment }) => {
         {/* Display avatar here */}
       </View>
       <View style={styles.commentContent}>
+      <Text style={styles.crimeTypeLabel}>{` ${comment.job}`}</Text>
         <Text style={styles.commentText}>{comment.comment}</Text>
         <View style={styles.commentInfoContainer}>
           <Text style={styles.commentInfoText}>{`By: ${comment.comment_email}`}</Text>
@@ -233,6 +254,7 @@ const CommentList = ({ verdictId, handleCommentSubmit }) => {
     if (commentText.trim() !== '') {
       handleCommentSubmit(commentText);
       setCommentText('');
+      fetchComments();
     }
   };
 
@@ -377,6 +399,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 100,
+  },
+  crimeTypeLabel: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#2196F3',
+    borderRadius: 4,
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 12,
+    alignSelf: 'flex-start',
+    marginTop: 4,
   },
 });
 

@@ -15,9 +15,9 @@ const VerdictScreen = () => {
   const onPressed = () => {
     navigation.navigate('ChangePassword' as never); // Remove unnecessary type casting
   };
-  const changeavatar = () => {
-    navigation.navigate('ChangeAvatar' as never); // Remove unnecessary type casting
-  };
+  // const changeavatar = () => {
+  //   navigation.navigate('ChangeAvatar' as never); // Remove unnecessary type casting
+  // };
   const changeprofile = () => {
     navigation.navigate('ChangeProfile' as never); // Remove unnecessary type casting
   };
@@ -35,6 +35,7 @@ const VerdictScreen = () => {
     })
       .then((response) => response.json())
       .then((responseData) => {
+        fetchVerdictData();
         setVerdictData(responseData.data);
         decodeImage(responseData.data.picture);
       })
@@ -59,7 +60,7 @@ const VerdictScreen = () => {
   return (
     <View>
       <View style={styles.container}>
-        <TouchableOpacity onPress={changeprofile}>
+        <TouchableOpacity >
           {imageData && <Image source={{ uri: imageData }} style={[styles.avatar, { borderRadius: imageWidth / 2 }]} />}
         </TouchableOpacity>
         <TouchableOpacity style={styles.name} onPress={changeprofile}>

@@ -59,9 +59,9 @@ const VerdictScreen = () => {
 
     //navigation.navigate('SignIn' as never);
   };
-  const changeavatar = () => {
-    navigation.navigate('ChangeAvatar' as never); // Remove unnecessary type casting
-  };
+  // const changeavatar = () => {
+  //   navigation.navigate('ChangeAvatar' as never); // Remove unnecessary type casting
+  // };
   const backProfile = () => {
     navigation.goBack();
   };
@@ -106,8 +106,8 @@ const VerdictScreen = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
-        <Text style={styles.title}>Reset your porfile</Text>
-        <TouchableOpacity onPress={changeavatar}>
+        <Text style={styles.title}>更改個人資料</Text>
+        <TouchableOpacity >
           {imageData && <Image source={{ uri: imageData }} style={[
             styles.avatar, { borderRadius: imageWidth / 2 },
           ]} />}
@@ -129,10 +129,10 @@ const VerdictScreen = () => {
           setValue={setJob_name}
         />
         
-        <CustomButton text="Send" onPress={onPressed} />
+        <CustomButton text="確定" onPress={onPressed} />
 
         <CustomButton
-          text="Back to Profile"
+          text="返回"
           onPress={backProfile}
           type="TERTIARY"
         />
