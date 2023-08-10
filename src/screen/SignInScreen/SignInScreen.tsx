@@ -146,10 +146,10 @@ const SignInScreen = () => {
           secureTextEntry={true}
         />
 
-        <CustomButton text="Sign In" onPress={onSignInPressed} />
+        <CustomButton text="登入" onPress={onSignInPressed} />
 
         <CustomButton
-          text="Forgot password?"
+          text="忘記密碼 ？"
           onPress={onForgotPasswordPressed}
           type="TERTIARY"
         />
@@ -157,7 +157,7 @@ const SignInScreen = () => {
         <SocialSignInButtons />
 
         <CustomButton
-          text="Don't have an account? Creat one"
+          text="還沒有帳號嗎？創建一個吧！"
           onPress={onSignUpPressed}
           type="TERTIARY"
         />

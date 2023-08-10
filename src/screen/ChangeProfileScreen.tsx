@@ -142,6 +142,13 @@ const VerdictScreen = () => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
         <Text style={styles.title}>更改個人資料</Text>
+<<<<<<< HEAD
+        <TouchableOpacity >
+          {imageData && <Image source={{ uri: imageData }} style={[
+            styles.avatar, { borderRadius: imageWidth / 2 },
+          ]} />}
+        </TouchableOpacity>
+=======
         {/* 頭像顯示 */}
         <View style={styles.selectedAvatarContainer}>
           {selectedAvatar ? (
@@ -182,6 +189,7 @@ const VerdictScreen = () => {
             ))}
           </View>
         )}
+>>>>>>> 7e21d68c33fa770116f2006c839c5c6033fb6e69
 
         <CustomInput
           placeholder={verdictData.name}
@@ -198,7 +206,11 @@ const VerdictScreen = () => {
           value={job_name}
           setValue={setJob_name}
         />
+<<<<<<< HEAD
+        
+=======
 
+>>>>>>> 7e21d68c33fa770116f2006c839c5c6033fb6e69
         <CustomButton text="確定" onPress={onPressed} />
 
         <CustomButton

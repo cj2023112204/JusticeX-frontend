@@ -60,7 +60,7 @@ const VerdictScreen = () => {
   return (
     <View>
       <View style={styles.container}>
-        <TouchableOpacity onPress={changeprofile}>
+        <TouchableOpacity >
           {imageData && <Image source={{ uri: imageData }} style={[styles.avatar, { borderRadius: imageWidth / 2 }]} />}
         </TouchableOpacity>
         <TouchableOpacity style={styles.name} onPress={changeprofile}>
