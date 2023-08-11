@@ -82,9 +82,4 @@ const Navigation = () => {
   );
 };
 
-<<<<<<< HEAD
 export default Navigation;
-
-=======
-export default Navigation;
->>>>>>> 7e21d68c33fa770116f2006c839c5c6033fb6e69
