@@ -59,11 +59,18 @@ const VerdictScreen = () => {
 
   return (
     <View>
+
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles. changeButton} onPress={changeprofile}>
+          <Text style={styles.TextTitle}>編輯</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.container}>
-        <TouchableOpacity onPress={changeprofile}>
+        <TouchableOpacity >
           {imageData && <Image source={{ uri: imageData }} style={[styles.avatar, { borderRadius: imageWidth / 2 }]} />}
         </TouchableOpacity>
-        <TouchableOpacity style={styles.name} onPress={changeprofile}>
+        <TouchableOpacity style={styles.name} >
           <Text style={styles.verdictTitle}>{verdictData.name}</Text>
         </TouchableOpacity>
       </View>
@@ -71,12 +78,12 @@ const VerdictScreen = () => {
       <View style={styles.separator}></View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={changeprofile}>
+        <TouchableOpacity style={styles.button} >
           <Text style={styles.TextTitle}>性別</Text>
           <Text style={styles.verdictTitle}>{verdictData.gender === 'F' ? '女' : '男'}</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={changeprofile}>
+        <TouchableOpacity style={styles.button} >
           <Text style={styles.TextTitle}>職稱</Text>
           <Text style={styles.verdictTitle}>{verdictData.job_name}</Text>
         </TouchableOpacity>
@@ -106,11 +113,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 16,
   },
-  Text: {
-    color: 'grey',
-    fontSize: 16,
-    marginTop: 15,
-  },
+  
   avatar: {
     width: 100,
     height: 100,
@@ -139,6 +142,12 @@ const styles = StyleSheet.create({
   favoriteButton: {
     width: 350,
     paddingVertical: 10,
+  },
+  changeButton: {
+    width: 100,
+    marginLeft: 300,
+    marginTop: 15,
+    fontSize: 16,
   },
   TextTitle: {
     color: 'black',
