@@ -69,7 +69,7 @@ const SignUpScreen = () => {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.root}>
-                <Text style={styles.title}>Create an account</Text>
+                <Text style={styles.title}>創建帳號</Text>
 
                 {/* <CustomInput
                     placeholder="Username"
@@ -94,7 +94,7 @@ const SignUpScreen = () => {
                     secureTextEntry={true}
                 /> */}
 
-                <CustomButton text="Register" onPress={onRegisterPressed} />
+                <CustomButton text="註冊" onPress={onRegisterPressed} />
 
                 <Text style={styles.text}>
                     By registering, you confirm that you accept our{' '}
@@ -106,7 +106,7 @@ const SignUpScreen = () => {
                 <SocialSignInButtons />
 
                 <CustomButton
-                    text="Have an account? Sign in"
+                    text="擁有帳號 ？登入"
                     onPress={onSignInPressed}
                     type="TERTIARY"
                 />

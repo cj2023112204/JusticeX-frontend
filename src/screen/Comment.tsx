@@ -8,16 +8,21 @@ import {
   FlatList,
   TextInput,
   Button,
+  Pressable,
+  Animated,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/native';
 import { API_URL } from '../../config';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const VerdictScreen = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const verdictId = route.params?.verdictId; // Access the verdictId parameter from the route
   const [incidentType, setIncidentType] = useState('incident');
+    const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState('');
   const [verdictData, setVerdictData] = useState(null);
   const [likesCount, setLikesCount] = useState(0);
   const [commentsCount, setCommentsCount] = useState(0);
@@ -48,6 +53,20 @@ const VerdictScreen = () => {
 
   const handleToggleIncidentType = () => {
     setIncidentType(incidentType === 'incident' ? 'incident_lite' : 'incident');
+  };
+  const fetchComments = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem('access_token');
+      const response = await fetch(`${API_URL}/comment/get_comments/?verdict_id=${verdictId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await response.json();
+      setComments(data.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleCommentSubmit = async (comment) => {
@@ -92,12 +111,45 @@ const VerdictScreen = () => {
       // Refresh likes count
       fetchVerdictData();
 
-      if (data.is_liked) {
+      if (data.success === "ture") {
         // Like was successful
         setLiked(true);
       } else {
         // Like was canceled
         setLiked(false);
+        handleUnlikeVerdict();
+        console.log("取消讚");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleUnlikeVerdict = async () => {
+    // Call the API to unlike the verdict
+    try {
+      const accessToken = await AsyncStorage.getItem('access_token');
+      const url = `${API_URL}/verdict/unlike_verdict/`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          verdict_id: verdictId,
+        }),
+      });
+      const data = await response.json();
+      console.log(data);
+
+      // Refresh likes count
+      fetchVerdictData();
+
+      if (data.success === "true") {
+        // Unlike was successful
+        setLiked(false);
+      } else {
       }
     } catch (error) {
       console.error(error);
@@ -140,7 +192,11 @@ const VerdictScreen = () => {
     <View style={styles.container}>
       <View style={styles.verdictContainer}>
         <Text style={styles.verdictTitle}>{verdictData.title}</Text>
+        <Text style={styles.verdictData}>{verdictData.judgement_date}</Text>
         <Text style={styles.verdictData}>{verdictData[incidentType]}</Text>
+        <Text style={styles.crimeTypeLabel}>{verdictData.crime_type}</Text>
+        <Text style={styles.verdictData}>{verdictData.judgement_date}</Text>
+        <Text style={styles.verdictData}>{verdictData.laws}</Text>
       </View>
 
       <View style={styles.separator}></View>
@@ -154,9 +210,20 @@ const VerdictScreen = () => {
       <View style={styles.separator}></View>
 
       <View style={styles.likesCommentsContainer}>
-        <TouchableOpacity onPress={handleLikeVerdict}>
-          <Text style={[styles.likeButton, liked ? { color: 'white' } : null]}>❤️ Like</Text>
-        </TouchableOpacity>
+        <Pressable onPress={() => setLiked((isLiked) => !isLiked)}>
+          <Animated.View
+            style={[
+              StyleSheet.absoluteFillObject,
+              { transform: [{ scale: liked ? 0 : 1 }] },
+            ]}
+          >
+            <MaterialCommunityIcons name={"heart-outline"} size={32} color={"black"} />
+          </Animated.View>
+
+          <Animated.View style={[{ transform: [{ scale: liked ? 1 : 0 }] }]}>
+            <MaterialCommunityIcons name={"heart"} size={32} color={"red"} />
+          </Animated.View>
+        </Pressable>
         <Text style={styles.likesCount}>{likesCount} likes</Text>
         <Text style={styles.commentsCount}>{commentsCount} comments</Text>
         <TouchableOpacity onPress={handleBookmarkVerdict}>
@@ -180,6 +247,7 @@ const CommentItem = ({ comment }) => {
         {/* Display avatar here */}
       </View>
       <View style={styles.commentContent}>
+      <Text style={styles.crimeTypeLabel}>{` ${comment.job}`}</Text>
         <Text style={styles.commentText}>{comment.comment}</Text>
         <View style={styles.commentInfoContainer}>
           <Text style={styles.commentInfoText}>{`By: ${comment.comment_email}`}</Text>
@@ -233,6 +301,7 @@ const CommentList = ({ verdictId, handleCommentSubmit }) => {
     if (commentText.trim() !== '') {
       handleCommentSubmit(commentText);
       setCommentText('');
+      fetchComments();
     }
   };
 
@@ -377,6 +446,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 100,
+  },
+  crimeTypeLabel: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#2196F3',
+    borderRadius: 4,
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 12,
+    alignSelf: 'flex-start',
+    marginTop: 4,
   },
 });
 

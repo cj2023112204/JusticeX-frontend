@@ -64,13 +64,40 @@ const ConfirmEmailScreen = ({ route }: any) => {
     };
 
     const onResendPressed = () => {
-        console.warn("onResendPressed");
+        fetch(`${API_URL}/auth/send_code/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: email,
+              is_forgot_password: false,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              // Handle response data
+              //setUsername(data)
+              //setPassword(data)
+              if(data.success===true){
+                console.log(data.message)
+              }else{
+                console.log('error')
+              }
+              console.log(data)
+              //navigation.navigate('ConfirmEmail' as never, { email: email, password: password }as never);
+
+            })
+            .catch((error) => {
+              // Handle error
+              console.error(error);
+            });
     };
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.root}>
-                <Text style={styles.title}>Confirm your email</Text>
+                <Text style={styles.title}>確認你的信箱</Text>
 
                 <CustomInput
                     placeholder="Email"
@@ -85,16 +112,16 @@ const ConfirmEmailScreen = ({ route }: any) => {
                 />
                 
 
-                <CustomButton text="Confirm" onPress={onConfirmPressed} />
+                <CustomButton text="送出" onPress={onConfirmPressed} />
 
                 <CustomButton
-                    text="Resend code"
+                    text="重新發送驗證碼"
                     onPress={onResendPressed}
                     type="SECONDARY"
                 />
 
                 <CustomButton
-                    text="Back to Sign in"
+                    text="回到登入"
                     onPress={onSignInPressed}
                     type="TERTIARY"
                 />

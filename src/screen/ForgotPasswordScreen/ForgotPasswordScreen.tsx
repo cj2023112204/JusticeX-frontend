@@ -44,7 +44,7 @@ const ForgotPasswordScreen = () => {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
-        <Text style={styles.title}>Reset your password</Text>
+        <Text style={styles.title}>重設密碼</Text>
 
         <CustomInput
           placeholder="Email"
@@ -52,10 +52,10 @@ const ForgotPasswordScreen = () => {
           setValue={setEmail}
         />
 
-        <CustomButton text="Send" onPress={onSendPressed} />
+        <CustomButton text="送出" onPress={onSendPressed} />
 
         <CustomButton
-          text="Back to Sign in"
+          text="回到登入"
           onPress={onSignInPressed}
           type="TERTIARY"
         />

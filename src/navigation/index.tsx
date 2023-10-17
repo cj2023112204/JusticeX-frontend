@@ -13,13 +13,15 @@ import VerifyCodeScreen from '../screen/VerifyCodeScreen'
 import QuizScreen from '../screen/QuizScreen'
 import ProfileScreen from "../screen/ProfileScreen";
 import ChangePasswordScreen from '../screen/ChangePasswordScreen';
-import ChangeAvatarScreen from "../screen/ChangeAvatarScreen";
+//import ChangeAvatarScreen from "../screen/ChangeAvatarScreen";
 import ChangeProfileScreen from "../screen/ChangeProfileScreen";
 import FavoriteScreen from "../screen/FavoriteScreen";
 import HomeScreen from '../screen/HomeScreen';
 import Article from '../screen/Article';
 import Comment from '../screen/Comment';
+import IntroductionPage from '../screen/Introuduce';
 import React, { useLayoutEffect } from 'react';
+import SignOut from '../SignOut';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -47,6 +49,8 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="首頁" component={HomeStack} />
       <Drawer.Screen name="個人資料" component={ProfileScreen} />
       <Drawer.Screen name="收藏" component={FavoriteScreen} />
+      <Drawer.Screen name="國民法官介紹" component={IntroductionPage}/>
+      <Drawer.Screen name="登出" component={SignOut} />
     </Drawer.Navigator>
   )
 }
@@ -66,10 +70,11 @@ const Navigation = () => {
         <Stack.Screen name='PersonalInfo' component={PersonalInfoScreen} />
         <Stack.Screen name='ChangePassword' component={ChangePasswordScreen} />
         <Stack.Screen name='ChangeProfile' component={ChangeProfileScreen} />
-        <Stack.Screen name='ChangeAvatar' component={ChangeAvatarScreen} />
+        {/* <Stack.Screen name='ChangeAvatar' component={ChangeAvatarScreen} /> */}
         <Stack.Screen name='Favorite' component={FavoriteScreen} />
         <Stack.Screen name='Profile' component={ProfileScreen} />
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
+        <Stack.Screen name='Quiz' component={QuizScreen}/>
         <Stack.Screen name="Comment" component={Comment} options={{ title: '判例詳情' , headerShown: true}} />
         <Stack.Screen name="Article" component={Article} options={{ title: '文章詳情' , headerShown: true}} />
       </Stack.Navigator>
@@ -77,4 +82,9 @@ const Navigation = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Navigation;
+
+=======
+export default Navigation;
+>>>>>>> 7e21d68c33fa770116f2006c839c5c6033fb6e69

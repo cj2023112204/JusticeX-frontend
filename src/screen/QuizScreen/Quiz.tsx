@@ -4,8 +4,10 @@ import { COLORS, SIZES } from '../../constants';
 import data from '../../data/QuizData';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import { API_URL } from '../../../config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Quiz = () => {
+const Quiz = ({ access_token }: any) => {
 
     const allQuestions = data;
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -47,23 +49,41 @@ const Quiz = () => {
             useNativeDriver: false
         }).start();
     }
-    const doneQuiz = () => {
-        // setShowScoreModal(false);
-
-        // setCurrentQuestionIndex(0);
-        // setScore(0);
-
-        // setCurrentOptionSelected(null);
-        // setCorrectOption("");
-        // setIsOptionsDisabled(false);
-        // setShowNextButton(false);
-        // Animated.timing(progress, {
-        //     toValue: 0,
-        //     duration: 1000,
-        //     useNativeDriver: false
-        // }).start();
-        navigation.navigate('SignIn' as never);
-    }
+    const doneQuiz = async () => {
+        const accessToken = await AsyncStorage.getItem('access_token');
+        //const previousValue = await AsyncStorage.getItem('is_quiz');
+        const newValue = 'true';
+      
+        try {
+          const response = await fetch(`${API_URL}/account/add_eazy_quiz/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+              question_id: '1',
+              score: score,
+            }),
+          });
+      
+          const data = await response.json();
+      
+          if (data.success === true) {
+            console.log(data.message);
+            await AsyncStorage.setItem('is_quiz', newValue);
+            const is_quiz = await AsyncStorage.getItem('is_quiz');
+            console.log(is_quiz)
+          } else {
+            console.log('error');
+          }
+      
+          console.log(data);
+          navigation.navigate('Home' as never);
+        } catch (error) {
+          console.error(error);
+        }
+      };
 
 
 
