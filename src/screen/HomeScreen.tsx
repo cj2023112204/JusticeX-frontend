@@ -22,7 +22,7 @@ interface Article {
 }
 const Separator = () => <View style={styles.separator} />;
 const HomeScreen = () => {
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
   const [activeCategory, setActiveCategory] = useState(categories[0]);
   const [articles, setArticles] = useState<Article[]>([]);
   const [currentPage, setCurrentPage] = useState(1);

@@ -20,7 +20,7 @@ const ConfirmEmailScreen = ({ route }: any) => {
     const { email }: any = route.params;
     console.log(email);
 
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
 
     //const API_URL = 'http://13.208.146.112:8000/api';
 

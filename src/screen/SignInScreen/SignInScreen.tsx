@@ -1,12 +1,15 @@
-import { View, Text, Image, StyleSheet, useWindowDimensions, ScrollView, } from 'react-native'
+import { View, Text, Image, StyleSheet, useWindowDimensions, ScrollView, TextInput, TouchableOpacity, } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import Logo from '../../../assets/images/logo_black.png';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import SocialSignInButtons from '../../components/SocialSignInButtons/SocialSignInButtons';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../../../config';
+//import { TextInput } from 'react-native-gesture-handler';
 
 const SignInScreen = () => {
   const [username, setUsername] = useState('');
@@ -14,7 +17,7 @@ const SignInScreen = () => {
   const [loggedIn, setLoggedIn] = useState(false);
 
   const { height } = useWindowDimensions();
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   //const API_URL = 'http://13.208.146.112:8000/api';
 
@@ -84,23 +87,23 @@ const SignInScreen = () => {
         console.log(data)
         console.log(data.success)
         //navigation.navigate('Home' as never);
-        const checkis_status = async () => { 
+        const checkis_status = async () => {
           const access_token = await AsyncStorage.getItem('access_token')
           const is_quiz = await AsyncStorage.getItem('is_quiz')
 
-          if (access_token?.length && is_quiz === 'true' ){
+          if (access_token?.length && is_quiz === 'true') {
             console.log(data.is_quiz)
             navigation.navigate('Home' as never);
-          }else if(access_token?.length && is_quiz !== 'true'){
+          } else if (access_token?.length && is_quiz !== 'true') {
             console.log(data.is_quiz)
             navigation.navigate('Quiz' as never, { access_token: access_token } as never);
-          }else{
+          } else {
             console.log(data.is_quiz)
             navigation.navigate('SignIn' as never);
           }
         }
-        
-        
+
+
 
       })
       .catch((error) => {
@@ -123,28 +126,79 @@ const SignInScreen = () => {
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
-      <View style={styles.root}>
-        <Image
-          source={Logo}
-          style={[styles.logo, { height: height * 0.3 }]}
-          resizeMode='contain'
-        />
+      {/* <View style={styles.root}> */}
+      <View style={{ paddingHorizontal: 25 }}>
+        <View style={{ alignItems: 'center' }}>
+          <Image
+            source={Logo}
+            style={[styles.logo, { height: height * 0.3 }]}
+            resizeMode='contain'
+          />
+        </View>
         {/* <View> */}
         {/* <Icon name='apple' type='material-community' size={20} color='#C0C0C0' /> */}
-        <CustomInput
+        {/* <CustomInput
           placeholder="example@mail.com"
           placeholderTextColor='#C0C0C0'
           value={username}
           setValue={setUsername}
-        />
+        /> */}
+
+        <View
+          style={{
+            flexDirection: 'row',
+            borderBottomColor: "#ccc",
+            borderBottomWidth: 1,
+            paddingBottom: 8,
+            marginBottom: 25,
+          }}>
+          <MaterialIcons
+            name='email'
+            size={20}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            value={username}
+            onChangeText={setUsername}
+            placeholder="example@mail.com"
+            style={{ flex: 1, paddingVertical: 0 }}
+            keyboardType='email-address'
+            autoCapitalize="none"
+          />
+        </View>
         {/* </View> */}
 
-        <CustomInput
+        {/* <CustomInput
           placeholder="Password"
           value={password}
           setValue={setPassword}
           secureTextEntry={true}
-        />
+        /> */}
+        <View
+          style={{
+            flexDirection: 'row',
+            borderBottomColor: "#ccc",
+            borderBottomWidth: 1,
+            paddingBottom: 8,
+            marginBottom: 25,
+          }}>
+          <Ionicons
+            name='ios-lock-closed-outline'
+            size={20}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Password"
+            style={{ flex: 1, paddingVertical: 0 }}
+            secureTextEntry={true}
+            autoCapitalize="none"
+          />
+
+        </View>
 
         <CustomButton text="登入" onPress={onSignInPressed} />
 
@@ -154,7 +208,7 @@ const SignInScreen = () => {
           type="TERTIARY"
         />
 
-        <SocialSignInButtons />
+        {/* <SocialSignInButtons /> */}
 
         <CustomButton
           text="還沒有帳號嗎？創建一個吧！"

@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView,TextInput } from 'react-native';
 import React, { useState } from 'react';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton';
 import { useNavigation } from '@react-navigation/native';
@@ -7,7 +8,7 @@ import { API_URL } from '../../../config';
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');
 
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   //const API_URL = 'http://13.208.146.112:8000/api';
 
@@ -30,7 +31,7 @@ const ForgotPasswordScreen = () => {
           console.log('error');
         }
         console.log(data);
-        navigation.navigate('VerifyCode' as never,{email: email} as never); // Remove unnecessary type casting
+        navigation.navigate('VerifyCode' as never, { email: email } as never); // Remove unnecessary type casting
       })
       .catch((error) => {
         console.error(error);
@@ -46,11 +47,35 @@ const ForgotPasswordScreen = () => {
       <View style={styles.root}>
         <Text style={styles.title}>重設密碼</Text>
 
-        <CustomInput
+        {/* <CustomInput
           placeholder="Email"
           value={email}
           setValue={setEmail}
-        />
+        /> */}
+
+        <View
+          style={{
+            flexDirection: 'row',
+            borderBottomColor: "#ccc",
+            borderBottomWidth: 1,
+            paddingBottom: 8,
+            marginBottom: 25,
+          }}>
+          <MaterialIcons
+            name='email'
+            size={20}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Email"
+            style={{ flex: 1, paddingVertical: 0 }}
+            keyboardType='email-address'
+            autoCapitalize="none"
+          />
+        </View>
 
         <CustomButton text="送出" onPress={onSendPressed} />
 
