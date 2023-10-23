@@ -5,6 +5,7 @@ import { API_URL } from '../../config';
 import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { View, Dimensions, TextInput, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const ChangeAvatar = [
   { id: '1', source: require('../../assets/images/1.jpg') },
@@ -24,9 +25,25 @@ const ChangeAvatar = [
   { id: '15', source: require('../../assets/images/8.jpg') },
   { id: '16', source: require('../../assets/images/9.jpg') },
   { id: '17', source: require('../../assets/images/10.jpg') },
+  { id: '18', source: require('../../assets/images/18.jpg') },
 
 
   // 添加其他照片的信息
+];
+const data = [
+  { label: '行政管理（管理幕僚、行政後勤/總務', value: '1' },
+  { label: '金融與保險（金融保險、財務會計）', value: '2' },
+  { label: '商務與市場推廣（國際貿易、業務推廣、門市銷售）', value: '3' },
+  { label: '客戶服務與支援（客服開發、售後服務）', value: '4' },
+  { label: '專案管理與諮詢（專案管理、顧問諮詢）', value: '5' },
+  { label: '技術與工程（電腦系統/資訊/軟硬體、光電半導體、機械工程）', value: '6' },
+  { label: '生產與製造（生產製程、模具相關、工具機加工）', value: '7' },
+  { label: '物流與供應鏈（運輸物流、採購資材）', value: '8' },
+  { label: '品質與安全（品管品保、營建/製圖/施作）', value: '9' },
+  { label: '醫療與健康（醫療/護理/保健）', value: '10' },
+  { label: '軍警消防', value: '11' },
+  { label: '教師', value: '12' },
+  { label: '法律相關（律師/法官/法律顧問)', value: '13' },
 ];
 
 const VerdictScreen = () => {
@@ -38,15 +55,16 @@ const VerdictScreen = () => {
   const [selectedAvatar, setSelectedAvatar] = useState<string>('');
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
 
+
   const handleAvatarSelection = (id: string) => {
     setSelectedAvatar(id);
     setpicture_id(id); // Update the picture_id state with the selected avatar ID
     setShowAvatarOptions(false); // Hide the avatar options list
   };
 
-  const toggleAvatarOptions = () => {
-    setShowAvatarOptions(!showAvatarOptions);
-  };
+  // const toggleAvatarOptions = () => {
+  //   setShowAvatarOptions(!showAvatarOptions);
+  // };
 
 
 
@@ -54,8 +72,10 @@ const VerdictScreen = () => {
   const [name, setname] = useState<string | null>(null);
   const [gender, setgender] = useState<string | null>(null);
   const [job_name, setJob_name] = useState<string | null>(null);
-  const [job_id, setjob_id] = useState<number>(12);
-  const [picture_id, setpicture_id] = useState<string| null>(null);
+  const [job_id, setjob_id] = useState<number>(11);
+  const [picture_id, setpicture_id] = useState<string | null>(null);
+  const [value, setValue] = useState<string>('');
+  const [isFocus, setIsFocus] = useState(false);
 
   const onPressed = async () => {
     // console.warn('onSubmitPressed');
@@ -142,6 +162,13 @@ const VerdictScreen = () => {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
         <Text style={styles.title}>更改個人資料</Text>
+<!-- <<<<<<< HEAD
+        <TouchableOpacity >
+          {imageData && <Image source={{ uri: imageData }} style={[
+            styles.avatar, { borderRadius: imageWidth / 2 },
+          ]} />}
+        </TouchableOpacity>
+======= -->
         {/* 頭像顯示 */}
         <View style={styles.selectedAvatarContainer}>
           {selectedAvatar ? (
@@ -182,6 +209,7 @@ const VerdictScreen = () => {
             ))}
           </View>
         )}
+<!-- >>>>>>> 7e21d68c33fa770116f2006c839c5c6033fb6e69 -->
 
         <CustomInput
           placeholder={verdictData.name}
@@ -193,11 +221,26 @@ const VerdictScreen = () => {
           value={gender}
           setValue={setgender}
         />
-        <CustomInput
-          placeholder={verdictData.job_name}
-          value={job_name}
-          setValue={setJob_name}
+        <Dropdown
+          style={[styles.dropdown]}
+          selectedTextStyle={styles.selectedTextStyle}
+          data={data}
+          labelField="label"
+          valueField="value"
+          placeholder={verdictData.job_name} // 设置初始文字
+
+          // value={job_id ? job_id.toString() : null} // 将 job_id 转换为字符串
+          onFocus={() => setIsFocus(true)}
+          onBlur={() => setIsFocus(false)}
+          onChange={item => {
+            const job_id = parseInt(item.value); // 将字符串转换为数字
+            setjob_id(job_id);
+            setIsFocus(false);
+          }}
+
         />
+
+        
         <CustomButton text="確定" onPress={onPressed} />
 
         <CustomButton
@@ -237,6 +280,31 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderRadius: 40,
     overflow: 'hidden',
+  },
+  label: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  dropdown: {//下拉式選單
+    height: 70,
+    width: "100%", // 增加宽度以容纳更长的文本
+    backgroundColor: 'white',
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+  },
+  selectedTextStyle: {//下拉式選單
+    fontSize: 16,
+    width: '100%',
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    lineHeight: 18, // 设置行高以适应两行文本
+    paddingHorizontal: 8,
+  },
+  selectedText: {
+    fontSize: 16,
+    marginTop: 10,
   },
   selectedAvatarOption: {
     borderColor: 'blue',
