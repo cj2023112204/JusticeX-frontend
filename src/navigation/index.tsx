@@ -2,6 +2,8 @@ import { View, Text } from 'react-native';
 import { NavigationContainer, useNavigation, useFocusEffect } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+
 
 import SignInScreen from '../screen/SignInScreen';
 import SignUpScreen from '../screen/SignUpScreen';
@@ -22,9 +24,27 @@ import Comment from '../screen/Comment';
 import IntroductionPage from '../screen/Introuduce';
 import React, { useLayoutEffect } from 'react';
 import SignOut from '../SignOut';
+import HomeTest from '../screen/HomeScreen/Home';
+import chart from '../screen/Testchart'
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
+
+const Tab = createMaterialTopTabNavigator();
+
+const HomeTabs = () => {
+  return(
+    <Tab.Navigator screenOptions={{
+      tabBarLabelStyle: { fontSize: 14 },
+      tabBarActiveTintColor:'black',
+      // tabBarItemStyle: { width: 100 },
+      // tabBarStyle: { backgroundColor: 'powderblue' },
+    }}>
+      <Tab.Screen name='熱門判例' component={HomeTest}/>
+      <Tab.Screen name='最新判例' component={HomeScreen}/>
+    </Tab.Navigator>
+  )
+}
 
 const HomeStack = () => {
   const navigation = useNavigation();
@@ -51,6 +71,8 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="收藏" component={FavoriteScreen} />
       <Drawer.Screen name="國民法官介紹" component={IntroductionPage}/>
       <Drawer.Screen name="登出" component={SignOut} />
+      <Drawer.Screen name='測試主頁' component={HomeTabs}/>
+      <Drawer.Screen name='測試圖表' component={chart}/>
     </Drawer.Navigator>
   )
 }
@@ -65,6 +87,7 @@ const Navigation = () => {
         <Stack.Screen name='Home' component={DrawerNavigation} />
         <Stack.Screen name='SignUp' component={SignUpScreen} />
         <Stack.Screen name='ConfirmEmail' component={ConfirmEmailScreen} />
+        <Stack.Screen name ='test' component={HomeTabs}/>
         <Stack.Screen name='ForgotPassword' component={ForgotPasswordScreen} />
         <Stack.Screen name='ResetPassword' component={ResetPasswordScreen} />
         <Stack.Screen name='PersonalInfo' component={PersonalInfoScreen} />
