@@ -14,6 +14,7 @@ import PersonalInfoScreen from '../screen/PersonalInfoScreen';
 import VerifyCodeScreen from '../screen/VerifyCodeScreen'
 import QuizScreen from '../screen/QuizScreen'
 import ProfileScreen from "../screen/ProfileScreen";
+import BottomSheetScrollScreen from '../screen/BottomSheetScrollScreen';
 import ChangePasswordScreen from '../screen/ChangePasswordScreen';
 //import ChangeAvatarScreen from "../screen/ChangeAvatarScreen";
 import ChangeProfileScreen from "../screen/ChangeProfileScreen";
@@ -83,6 +84,7 @@ const Navigation = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         
         {/* <Stack.Screen name='Quiz' component={QuizScreen} /> */}
+        <Stack.Screen name='BottomSheetScroll' component={BottomSheetScrollScreen} />
         <Stack.Screen name='SignIn' component={SignInScreen} />
         <Stack.Screen name='Home' component={DrawerNavigation} />
         <Stack.Screen name='SignUp' component={SignUpScreen} />
