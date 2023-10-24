@@ -17,7 +17,7 @@ const Quiz = ({ access_token }: any) => {
     const [score, setScore] = useState(0)
     const [showNextButton, setShowNextButton] = useState(false)
     const [showScoreModal, setShowScoreModal] = useState(false)
-    const navigation = useNavigation();
+    const navigation: any = useNavigation();
 
     const validateAnswer = (selectedOption: any) => {
         let correct_option = allQuestions[currentQuestionIndex]['correct_option'];
@@ -66,7 +66,7 @@ const Quiz = ({ access_token }: any) => {
               score: score,
             }),
           });
-      
+
           const data = await response.json();
       
           if (data.success === true) {
@@ -84,6 +84,10 @@ const Quiz = ({ access_token }: any) => {
           console.error(error);
         }
       };
+
+      const navigationToHome = async () => {
+        navigation.navigate('Home' as never);
+      }
 
 
 
@@ -262,7 +266,7 @@ const Quiz = ({ access_token }: any) => {
                             padding: 20,
                             alignItems: 'center'
                         }}>
-                            <Text style={{ fontSize: 30, fontWeight: 'bold' }}>{score > (allQuestions.length / 2) ? 'Congratulations!' : 'Oops!'}</Text>
+                            <Text style={{ fontSize: 30, fontWeight: 'bold' }}>{score > (allQuestions.length / 2) ? '不錯噢!' : '待加強!'}</Text>
 
                             <View style={{
                                 flexDirection: 'row',
@@ -280,7 +284,7 @@ const Quiz = ({ access_token }: any) => {
                             </View>
                             {/* Retry Quiz button */}
                             <TouchableOpacity
-                                onPress={doneQuiz}
+                                onPress={navigationToHome}
                                 style={{
                                     backgroundColor: COLORS.accent,
                                     padding: 20, width: '100%', borderRadius: 20
