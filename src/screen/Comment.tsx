@@ -21,7 +21,7 @@ const VerdictScreen = () => {
   const route = useRoute();
   const verdictId = route.params?.verdictId; // Access the verdictId parameter from the route
   const [incidentType, setIncidentType] = useState('incident');
-    const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState([]);
   const [commentText, setCommentText] = useState('');
   const [verdictData, setVerdictData] = useState(null);
   const [likesCount, setLikesCount] = useState(0);
