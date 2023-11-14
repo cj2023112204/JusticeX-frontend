@@ -8,7 +8,7 @@ import { FlatList } from 'react-native-gesture-handler';
 
 
 
-const Testchart = () => {
+export default function Testchart  ({verdictId,crimeId}:any)  {
     const bottomSheetRef = useRef<BottomSheet>(null);
     const [chartData, setChartData] = useState<any>(null);
     useEffect(() => {
@@ -28,8 +28,8 @@ const Testchart = () => {
 
 
     const fetchData = async () => {
-        const verdictId = 10;
-        const crimeId = 1;
+        // const verdictId = 10;
+        // const crimeId = 1;
         console.log("1")
         const accessToken = await AsyncStorage.getItem('access_token');
 
@@ -420,4 +420,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Testchart;
+// export default Testchart;

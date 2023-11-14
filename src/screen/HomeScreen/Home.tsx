@@ -222,7 +222,7 @@ const Home = () => {
       <TouchableOpacity
         key={index.toString()}
         style={{ flex: 1, alignItems: "center", paddingTop: 21, paddingBottom: 10 }}
-        onPress={() => navigation.navigate('Comment', { verdictId: item.verdict_id } )}
+        onPress={() => navigation.navigate('Verdict', { verdictId: item.verdict_id } )}
       >
         <Card
           title={item.title}

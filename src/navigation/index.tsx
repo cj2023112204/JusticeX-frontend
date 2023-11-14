@@ -73,9 +73,9 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="個人資料" component={ProfileScreen} />
       <Drawer.Screen name="收藏" component={FavoriteScreen} />
       <Drawer.Screen name="國民法官介紹" component={IntroductionPage}/>
-      <Drawer.Screen name="判例趨勢" component={Trend}/>
+      <Drawer.Screen name="犯罪特徵趨勢" component={Trend}/>
       <Drawer.Screen name="登出" component={SignOut} />
-      <Drawer.Screen name='測試主頁' component={HomeTabs}/>
+      <Drawer.Screen name='主頁' component={HomeTabs}/>
       <Drawer.Screen name='測試圖表' component={chart}/>
       <Drawer.Screen name="測試判例" component={Verdict}/>
     </Drawer.Navigator>
@@ -105,6 +105,7 @@ const Navigation = () => {
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
         <Stack.Screen name='Quiz' component={QuizScreen}/>
         <Stack.Screen name="Comment" component={Comment} options={{ title: '判例詳情' , headerShown: true}} />
+        <Stack.Screen name="Verdict" component={Verdict} options={{title: '判例詳情' , headerShown: true}}/>
         <Stack.Screen name="Article" component={Article} options={{ title: '文章詳情' , headerShown: true}} />
       </Stack.Navigator>
     </NavigationContainer>
