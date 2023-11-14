@@ -1,4 +1,5 @@
-import * as React from "react";import { Text, StyleSheet, Image, View, StatusBar, FlatList, ActivityIndicator, Platform, TouchableOpacity, Pressable } from "react-native";
+import * as React from "react";
+import { Text, StyleSheet, Image, View, StatusBar, FlatList, ActivityIndicator, Platform, TouchableOpacity, Pressable } from "react-native";
 import { FontFamily, FontSize, Padding, Color, Border } from "./GlobalStyles";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { Divider, color, SearchBar } from "@rneui/base";
@@ -48,7 +49,7 @@ const Home = () => {
     setIsLoading(true);
     const nextPage = Math.floor(data.length / 10) + 1;
     const accessToken = await AsyncStorage.getItem('access_token');
-    console.log("hi");
+    // console.log("hi");
     fetch(`${API_URL}/verdict/get_verdicts/?page=1&is_latest=0`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -221,7 +222,7 @@ const Home = () => {
       <TouchableOpacity
         key={index.toString()}
         style={{ flex: 1, alignItems: "center", paddingTop: 21, paddingBottom: 10 }}
-        onPress={() => navigation.navigate('Comment', { verdictId: item.verdict_id } )}
+        onPress={() => navigation.navigate('Verdict', { verdictId: item.verdict_id } )}
       >
         <Card
           title={item.title}

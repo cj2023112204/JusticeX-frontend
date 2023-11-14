@@ -3,11 +3,11 @@ import { View, Text, StyleSheet, Dimensions, StatusBar, SafeAreaView, ScrollView
 import FastImage from 'react-native-fast-image';
 
 const IntroductionPage = () => {
-  const { height,width } = Dimensions.get('window');
+  const { height, width } = Dimensions.get('window');
   const [sliderState, setSliderState] = useState({ currentPage: 0 });
 
   const setSliderPage = (event: any) => {
-    
+
     const { currentPage } = sliderState;
     const { x } = event.nativeEvent.contentOffset;
     const indexOfNextScreen = Math.round(x / width);
@@ -16,9 +16,10 @@ const IntroductionPage = () => {
         ...sliderState,
         currentPage: indexOfNextScreen,
       });
-      console.log("換頁囉");
-      console.log(currentPage,indexOfNextScreen);
-    }else{console.log(currentPage,indexOfNextScreen);}
+      // console.log("換頁囉");
+      // console.log(currentPage,indexOfNextScreen);
+      // }else{console.log(currentPage,indexOfNextScreen);}
+    }
   };
 
   const { currentPage: pageIndex } = sliderState;
@@ -28,12 +29,12 @@ const IntroductionPage = () => {
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={{ flex: 1 }}>
         <ScrollView
-          style={{ width,flex: 1 }}
+          style={{ width, flex: 1 }}
           horizontal={true}
           scrollEventThrottle={16}
           pagingEnabled={true}
           showsHorizontalScrollIndicator={true}
-          
+
           onScroll={(event: any) => {
             setSliderPage(event);
           }}
@@ -213,7 +214,7 @@ const IntroductionPage = () => {
 
               </View>
               <View style={styles.square}>
-                <View style={styles.square1}> 
+                <View style={styles.square1}>
                   <Text style={styles.paragraph3}>結果一  不符資格</Text>
                   <Text style={styles.paragraph3}>結果二  符合資格但有權拒絕者拒絕擔任</Text>
                   <Text style={styles.paragraph3}>結果三  符合資格並被抽選到</Text>
@@ -271,7 +272,7 @@ const styles = StyleSheet.create({
     top: '110%',
     fontSize: 17,
     color: 'black',
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
   iconStyle: {
     width: 20,
@@ -288,7 +289,7 @@ const styles = StyleSheet.create({
     top: '110%',
     fontSize: 20,
     color: 'black',
-    fontWeight:'bold',
+    fontWeight: 'bold',
 
   },
   circle: {
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
 
   },
-  dashedLineend:{
+  dashedLineend: {
     flex: 1,
     borderWidth: 0,
     borderColor: '#252525',
@@ -382,7 +383,7 @@ const styles = StyleSheet.create({
     width: '50%',
     left: 0,
   },
-  square3:{
+  square3: {
     borderWidth: 1,
     borderColor: 'black',
     padding: 10,

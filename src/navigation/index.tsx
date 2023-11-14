@@ -14,7 +14,7 @@ import PersonalInfoScreen from '../screen/PersonalInfoScreen';
 import VerifyCodeScreen from '../screen/VerifyCodeScreen'
 import QuizScreen from '../screen/QuizScreen'
 import ProfileScreen from "../screen/ProfileScreen";
-import BottomSheetScrollScreen from '../screen/BottomSheetScrollScreen';
+// import BottomSheetScrollScreen from '../screen/BottomSheetScrollScreen';
 import ChangePasswordScreen from '../screen/ChangePasswordScreen';
 //import ChangeAvatarScreen from "../screen/ChangeAvatarScreen";
 import ChangeProfileScreen from "../screen/ChangeProfileScreen";
@@ -26,7 +26,9 @@ import IntroductionPage from '../screen/Introuduce';
 import React, { useLayoutEffect } from 'react';
 import SignOut from '../SignOut';
 import HomeTest from '../screen/HomeScreen/Home';
-import chart from '../screen/Testchart'
+import chart from '../screen/Testchart';
+import Trend from '../screen/TrendScreen';
+import Verdict from '../screen/VerdictScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -71,9 +73,11 @@ const DrawerNavigation = () => {
       <Drawer.Screen name="個人資料" component={ProfileScreen} />
       <Drawer.Screen name="收藏" component={FavoriteScreen} />
       <Drawer.Screen name="國民法官介紹" component={IntroductionPage}/>
+      <Drawer.Screen name="犯罪特徵趨勢" component={Trend}/>
       <Drawer.Screen name="登出" component={SignOut} />
-      <Drawer.Screen name='測試主頁' component={HomeTabs}/>
+      <Drawer.Screen name='主頁' component={HomeTabs}/>
       <Drawer.Screen name='測試圖表' component={chart}/>
+      <Drawer.Screen name="測試判例" component={Verdict}/>
     </Drawer.Navigator>
   )
 }
@@ -84,7 +88,7 @@ const Navigation = () => {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         
         {/* <Stack.Screen name='Quiz' component={QuizScreen} /> */}
-        <Stack.Screen name='BottomSheetScroll' component={BottomSheetScrollScreen} />
+        {/* <Stack.Screen name='BottomSheetScroll' component={BottomSheetScrollScreen} /> */}
         <Stack.Screen name='SignIn' component={SignInScreen} />
         <Stack.Screen name='Home' component={DrawerNavigation} />
         <Stack.Screen name='SignUp' component={SignUpScreen} />
@@ -101,6 +105,7 @@ const Navigation = () => {
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
         <Stack.Screen name='Quiz' component={QuizScreen}/>
         <Stack.Screen name="Comment" component={Comment} options={{ title: '判例詳情' , headerShown: true}} />
+        <Stack.Screen name="Verdict" component={Verdict} options={{title: '判例詳情' , headerShown: true}}/>
         <Stack.Screen name="Article" component={Article} options={{ title: '文章詳情' , headerShown: true}} />
       </Stack.Navigator>
     </NavigationContainer>
