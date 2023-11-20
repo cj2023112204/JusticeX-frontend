@@ -1,10 +1,10 @@
 
 export const FontFamily = {
-    text1: "PlusJakartaSans-Regular",
-    subtitle: "PlusJakartaSans-Bold",
-    text3: "PlusJakartaSans-Medium",
-    headingsH3: "Inter-SemiBold",
-    calloutBold: "SF Pro Text",
+    // text1: "PlusJakartaSans-Regular",
+    // subtitle: "PlusJakartaSans-Bold",
+    // text3: "PlusJakartaSans-Medium",
+    // headingsH3: "Inter-SemiBold",
+    // calloutBold: "SF Pro Text",
   };
   /* font sizes */
   export const FontSize = {

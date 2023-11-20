@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
-import { View, Text, SafeAreaView, StatusBar, Image, TouchableOpacity, Modal, Animated } from 'react-native'
+import { View, Text, SafeAreaView, StatusBar, Image, TouchableOpacity, Modal, Animated, } from 'react-native'
 import { COLORS, SIZES } from '../../constants';
-import data from '../../data/QuizData';
+import data from '../../data/BottomSheetScrollQuizData';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from '../../../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Home from '../HomeScreen/Home';
+import useForceUpdate from 'use-force-update';
 
-const Quiz = ({ access_token }: any) => {
+
+
+const ButtonSheetScrollQuiz2 = ({ access_token }: any) => {
 
     const allQuestions = data;
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -18,9 +22,10 @@ const Quiz = ({ access_token }: any) => {
     const [showNextButton, setShowNextButton] = useState(false)
     const [showScoreModal, setShowScoreModal] = useState(false)
     const navigation: any = useNavigation();
+    const forceUpdate = useForceUpdate();
 
     const validateAnswer = (selectedOption: any) => {
-        let correct_option = allQuestions[currentQuestionIndex]['correct_option'];
+        let correct_option = allQuestions[2][currentQuestionIndex]['correct_option'];
         setCurrentOptionSelected(selectedOption);
         setCorrectOption(correct_option);
         setIsOptionsDisabled(true);
@@ -32,7 +37,7 @@ const Quiz = ({ access_token }: any) => {
         setShowNextButton(true)
     }
     const handleNext = () => {
-        if (currentQuestionIndex == allQuestions.length - 1) {
+        if (currentQuestionIndex == allQuestions[2].length - 1) {
             // Last Question
             // Show Score Modal
             setShowScoreModal(true)
@@ -49,44 +54,51 @@ const Quiz = ({ access_token }: any) => {
             useNativeDriver: false
         }).start();
     }
-    const doneQuiz = async () => {
-        const accessToken = await AsyncStorage.getItem('access_token');
-        //const previousValue = await AsyncStorage.getItem('is_quiz');
-        const newValue = 'true';
+    // const doneQuiz = async () => {
+    //     const accessToken = await AsyncStorage.getItem('access_token');
+    //     //const previousValue = await AsyncStorage.getItem('is_quiz');
+    //     const newValue = 'true';
       
-        try {
-          const response = await fetch(`${API_URL}/account/add_eazy_quiz/`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify({
-              question_id: '1',
-              score: score,
-            }),
-          });
+    //     try {
+    //       const response = await fetch(`${API_URL}/account/add_eazy_quiz/`, {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //           Authorization: `Bearer ${accessToken}`,
+    //         },
+    //         body: JSON.stringify({
+    //           question_id: '1',
+    //           score: score,
+    //         }),
+    //       });
 
-          const data = await response.json();
+    //       const data = await response.json();
       
-          if (data.success === true) {
-            console.log(data.message);
-            await AsyncStorage.setItem('is_quiz', newValue);
-            const is_quiz = await AsyncStorage.getItem('is_quiz');
-            console.log(is_quiz)
-          } else {
-            console.log('error');
-          }
+    //       if (data.success === true) {
+    //         console.log(data.message);
+    //         await AsyncStorage.setItem('is_quiz', newValue);
+    //         const is_quiz = await AsyncStorage.getItem('is_quiz');
+    //         console.log(is_quiz)
+    //       } else {
+    //         console.log('error');
+    //       }
       
-          console.log(data);
-          navigation.navigate('Home' as never);
-        } catch (error) {
-          console.error(error);
-        }
-      };
+    //       console.log(data);
+    //       navigation.navigate('Home' as never);
+    //     } catch (error) {
+    //       console.error(error);
+    //     }
+    //   };
 
-      const navigationToHome = async () => {
-        navigation.navigate('Home' as never);
+    //   const navigationToComment = async () => {
+    //     navigation.navigate('Comment' as never);
+    //   }
+    const navigationToComment = async () => {
+        setShowScoreModal(false);
+        console.log('Navigating to Comment');
+        navigation.navigate('Comment');
+        console.log('Navigation completed');
+        forceUpdate();
       }
 
 
@@ -102,14 +114,14 @@ const Quiz = ({ access_token }: any) => {
                     alignItems: 'flex-end'
                 }}>
                     <Text style={{ color: COLORS.white, fontSize: 20, opacity: 0.6, marginRight: 2 }}>{currentQuestionIndex + 1}</Text>
-                    <Text style={{ color: COLORS.white, fontSize: 18, opacity: 0.6 }}>/ {allQuestions.length}</Text>
+                    <Text style={{ color: COLORS.white, fontSize: 18, opacity: 0.6 }}>/ {allQuestions[2].length}</Text>
                 </View>
 
                 {/* Question */}
                 <Text style={{
                     color: COLORS.white,
                     fontSize: 30
-                }}>{allQuestions[currentQuestionIndex]?.question}</Text>
+                }}>{allQuestions[2][currentQuestionIndex]?.question}</Text>
             </View>
         )
     }
@@ -117,23 +129,28 @@ const Quiz = ({ access_token }: any) => {
         return (
             <View>
                 {
-                    allQuestions[currentQuestionIndex]?.options.map(option => (
+                    allQuestions[2][currentQuestionIndex]?.options.map(option => (
                         <TouchableOpacity
                             onPress={() => validateAnswer(option)}
                             disabled={isOptionsDisabled}
                             key={option}
                             style={{
                                 borderWidth: 3,
-                                borderColor: option == correctOption
-                                    ? COLORS.success
-                                    : option == currentOptionSelected
-                                        ? COLORS.error
-                                        : COLORS.secondary + '40',
-                                backgroundColor: option == correctOption
-                                    ? COLORS.success + '20'
-                                    : option == currentOptionSelected
-                                        ? COLORS.error + '20'
-                                        : COLORS.secondary + '20',
+                                borderColor: 
+                                // option == correctOption
+                                //     ? COLORS.success
+                                //     : 
+                                    option == currentOptionSelected
+                                        ? COLORS.secondary
+                                        : 
+                                        COLORS.primary + '40',
+                                backgroundColor: 
+                                // option == correctOption
+                                //     ? COLORS.success + '20'
+                                //     : option == currentOptionSelected
+                                //         ? COLORS.error + '20'
+                                //         : 
+                                        COLORS.secondary + '20',
                                 height: 60, borderRadius: 20,
                                 flexDirection: 'row',
                                 alignItems: 'center', justifyContent: 'space-between',
@@ -144,7 +161,7 @@ const Quiz = ({ access_token }: any) => {
                             <Text style={{ fontSize: 20, color: COLORS.white }}>{option}</Text>
 
                             {/* Show Check Or Cross Icon based on correct answer*/}
-                            {
+                            {/* {
                                 option == correctOption ? (
                                     <View style={{
                                         width: 30, height: 30, borderRadius: 30 / 2,
@@ -168,7 +185,7 @@ const Quiz = ({ access_token }: any) => {
                                         }} />
                                     </View>
                                 ) : null
-                            }
+                            } */}
 
                         </TouchableOpacity>
                     ))
@@ -195,7 +212,7 @@ const Quiz = ({ access_token }: any) => {
 
     const [progress, setProgress] = useState(new Animated.Value(0));
     const progressAnim = progress.interpolate({
-        inputRange: [0, allQuestions.length],
+        inputRange: [0, allQuestions[2].length],
         outputRange: ['0%', '100%']
     })
     const renderProgressBar = () => {
@@ -266,32 +283,32 @@ const Quiz = ({ access_token }: any) => {
                             padding: 20,
                             alignItems: 'center'
                         }}>
-                            <Text style={{ fontSize: 30, fontWeight: 'bold' }}>{score > (allQuestions.length / 2) ? '不錯噢!' : '待加強!'}</Text>
+                            <Text style={{ fontSize: 30, fontWeight: 'bold' }}>{score > (allQuestions[2].length / 2) ? '快來留言吧!' : '快來留言吧!'}</Text>
 
                             <View style={{
                                 flexDirection: 'row',
                                 justifyContent: 'flex-start',
                                 alignItems: 'center',
-                                marginVertical: 20
+                                marginVertical: 15
                             }}>
-                                <Text style={{
+                                {/* <Text style={{
                                     fontSize: 30,
-                                    color: score > (allQuestions.length / 2) ? COLORS.success : COLORS.error
+                                    color: score > (allQuestions[1].length / 2) ? COLORS.success : COLORS.error
                                 }}>{score}</Text>
                                 <Text style={{
                                     fontSize: 20, color: COLORS.black
-                                }}>/ {allQuestions.length}</Text>
+                                }}>/ {allQuestions[1].length}</Text> */}
                             </View>
                             {/* Retry Quiz button */}
                             <TouchableOpacity
-                                onPress={doneQuiz}
+                                onPress={navigationToComment}
                                 style={{
                                     backgroundColor: COLORS.accent,
                                     padding: 20, width: '100%', borderRadius: 20
                                 }}>
                                 <Text style={{
                                     textAlign: 'center', color: COLORS.white, fontSize: 20
-                                }}>完成</Text>
+                                }}>留言</Text>
                             </TouchableOpacity>
 
                         </View>
@@ -320,4 +337,4 @@ const Quiz = ({ access_token }: any) => {
     )
 }
 
-export default Quiz
+export default ButtonSheetScrollQuiz2
