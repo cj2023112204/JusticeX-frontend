@@ -4,6 +4,7 @@ import Article from './Article';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '../../config';
+import Card from "../components/Card/Card";
 
 interface Article {
   verdict_id: number;
@@ -20,6 +21,15 @@ const FavoriteScreen = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLatest, setIsLatest] = useState(0);
   const [searchText, setSearchText] = useState('');
+  const Separator = () => <View style={styles.separator} />;
+  const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = React.useState<any[]>([]);
+
+  const getItemLayout = (data: any, index: number) => ({
+    length: 180, // 这里根据你的列表项高度进行设置
+    offset: 180 * index, // 这里根据你的列表项高度进行设置
+    index,
+  });
 
   useEffect(() => {
     fetchArticles(currentPage, isLatest);
@@ -69,15 +79,47 @@ const FavoriteScreen = () => {
     );
   };
 
+  const CardItem = React.memo(({ item, index }: { item: any, index: number }) => {
+    return (
+      <TouchableOpacity
+        key={index.toString()}
+        style={{ flex: 1, alignItems: "center", paddingTop: 21, paddingBottom: 10 }}
+        onPress={() => navigation.navigate('Verdict', { verdictId: item.verdict_id } )}
+      >
+        <Card
+          title={item.title}
+          date={item.judgement_date}
+          crime_type={item.crime_type}
+          likes={item.total_like}
+          total_comment={item.total_comment}
+        />
+      </TouchableOpacity>
+    );
+  });
 
   return (
     <View style={styles.container}>
-      <FlatList
+      {/* <FlatList
         data={filteredArticles}
         renderItem={renderArticleItem}
         keyExtractor={(item, index) => `${item.title}-${index}`}
+      /> */}
+<FlatList
+        ListEmptyComponent={<Text>No data available</Text>}
+        data={filteredArticles}
+        renderItem={({ item, index }) => (<CardItem item={item} index={index} />)}
+        keyExtractor={(item, index) => `${item.verdict_id}-${index}`}
+        initialNumToRender={30}
+        maxToRenderPerBatch={1}
+        onEndReachedThreshold={0.5}
+        ItemSeparatorComponent={Separator}
+        // onEndReached={loadMoreData}
+        ListFooterComponent={isLoading ? <ActivityIndicator size="large" color="#0000ff" /> : null}
+        extraData={[data, /* other relevant data */]}
+        // contentContainerStyle={[styles.card, styles.scrollView]}
+        getItemLayout={getItemLayout}
+        removeClippedSubviews
       />
-
     </View>
   );
 };
