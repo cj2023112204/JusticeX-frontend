@@ -4,12 +4,17 @@ import { useNavigation, useFocusEffect, useRoute } from '@react-navigation/nativ
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { API_URL } from '../../../config';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Card from "../../components/Card/Card";
 import Testchart from "../Testchart";
 import { LineChart, PieChart } from 'react-native-chart-kit';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import ButtonSheetScrollQuiz from '../BottomSheetScrollQuizScreen/BottomSheetScrollQuiz';
+import ButtonSheetScrollQuiz2 from '../BottomSheetScrollQuizScreen/BottomSheetScrollQuiz';
+import ButtonSheetScrollQuiz3 from '../BottomSheetScrollQuizScreen/BottomSheetScrollQuiz';
+import ButtonSheetScrollQuiz4 from '../BottomSheetScrollQuizScreen/BottomSheetScrollQuiz';
+import BottomSheetScrollView2 from '../../components/BottomSheetScrollView/BottomSheetScrollView2';
 
 
 
@@ -32,15 +37,38 @@ const Verdict = () => {
     const [comments, setComments] = useState([]);
     const combottomSheetRef = useRef<BottomSheet>(null);
     const [replyText, setReplyText] = useState('');
+    const bottomSheetRef2 = useRef<BottomSheet>(null);
+    const bottomSheetRef3 = useRef<BottomSheet>(null);
+    const bottomSheetRef4 = useRef<BottomSheet>(null);
+    const bottomSheetRef5 = useRef<BottomSheet>(null);
+    const [is_money_related, setis_money_related] = useState(false);
+
+    const pressHandler2 = useCallback((crimeID: any) => {
+        console.log(verdictId)
+        if (crimeID === 1) {
+            bottomSheetRef2.current?.expand();
+        } else if (crimeID === 2) {
+            bottomSheetRef3.current?.expand();
+        } else if (crimeID === 3) {
+            bottomSheetRef4.current?.expand();
+        } else (crimeID === 4)
+        bottomSheetRef5.current?.expand();
 
 
-
+    }, []);
+    const [crimeID, setcrimeID] = useState(0);
     useEffect(() => {
         // fetchData();
         fetchVerdictData();
         fetchRecommendations();
         fetchCommentsData();
     }, []);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            return () => bottomSheetRef2.current?.close()
+        }, [])
+    );
 
     const chartConfig = {
         backgroundGradientFrom: "#1E2923",
@@ -53,9 +81,11 @@ const Verdict = () => {
         useShadowColorFromDataset: false // optional
     };
 
+
+
     const fetchData = async () => {
         // const verdictId = 10;
-        const crimeId = 1;
+        //const crimeId = 1;
         console.log("1")
         const accessToken = await AsyncStorage.getItem('access_token');
 
@@ -65,7 +95,7 @@ const Verdict = () => {
                 Authorization: `Bearer ${accessToken}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ "verdict_id": verdictId, "crime_id": crimeId }),
+            body: JSON.stringify({ "verdict_id": verdictId, "crime_id": crimeID }),
         })
 
             .then((response) => response.json())
@@ -368,7 +398,9 @@ const Verdict = () => {
                 setVerdictData(responseData.data);
                 setLikesCount(responseData.data.total_like);
                 setCommentsCount(responseData.data.total_comment);
+                setcrimeID(responseData.data.crime_id);
             })
+
             .catch((error) => {
                 console.error(error);
             });
@@ -390,6 +422,11 @@ const Verdict = () => {
             });
     };
 
+    const replycomment = async () => {
+        const accessToken = await AsyncStorage.getItem('access_token');
+        fetch(`${API_URL}`)
+    }
+
     const renderComment = (comment) => (
         <View key={comment.comment_id} style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
             <Text>{comment.comment_email}</Text>
@@ -400,7 +437,16 @@ const Verdict = () => {
                 onChangeText={(text) => setReplyText(text)}
                 style={{ borderWidth: 1, borderColor: '#ccc', marginVertical: 8, padding: 8 }}
             />
+            <View style={{ alignItems: 'center' }}>
+                <TouchableOpacity >
+                    <View style={{ backgroundColor: '#252525', width: 72, borderRadius: 12, padding: 12 }}>
+                        <Text style={{ color: '#ffffff', textAlign: 'center' }}>回覆</Text>
+                    </View>
+                </TouchableOpacity>
+            </View>
+
             <Button
+
                 title="Reply"
                 onPress={() => {
                     // Handle the logic to add a reply here, e.g., call an API
@@ -558,18 +604,25 @@ const Verdict = () => {
                     <View style={[styles.bottomBarChild, styles.bottomLayout]} />
                     <View style={[styles.downloadPro, styles.downloadProPosition]}>
                         <View style={styles.profileFlexBox}>
-                            <Image
-                                style={styles.cocoboldsavedIconLayout}
-                                resizeMode="cover"
-                                source={require("../../../assets/images/Download.png")}
-                            />
-                            <Text style={[styles.text20, styles.textTypo1]}>開啟留言</Text>
+                            <TouchableOpacity onPress={() => {
+                                combottomSheetRef.current?.expand();
+                            }}>
+                                <Image
+                                    style={styles.cocoboldsavedIconLayout}
+                                    resizeMode="cover"
+                                    source={require("../../../assets/images/Download.png")}
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                                combottomSheetRef.current?.expand();
+                            }}>
+                                <Text style={[styles.text20, styles.textTypo1]}>開啟留言</Text>
+                            </TouchableOpacity>
                         </View>
                         <View style={[styles.multiSingleSelect, styles.mjFlexBox]}>
                             <TouchableOpacity
-                                onPress={() => {
-                                    combottomSheetRef.current?.expand();
-                                }}>
+
+                                onPress={() => pressHandler2(crimeID)}>
                                 <Text style={[styles.tag, styles.tagTypo]}>留言</Text>
                             </TouchableOpacity>
                         </View>
@@ -589,6 +642,16 @@ const Verdict = () => {
                         <Text style={[styles.text8, styles.tagTypo]}>{likesCount} 個讚</Text>
                     </View>
                 </View>
+                <BottomSheetScrollView2
+                    ref={bottomSheetRef2}
+                    snapTo={'50%'}
+                    backgroundColor='white'
+                    backDropColor='black'
+                >
+                    <ButtonSheetScrollQuiz verdictId={verdictId} />
+                </BottomSheetScrollView2>
+
+
 
                 <BottomSheet
                     ref={combottomSheetRef}
@@ -598,6 +661,7 @@ const Verdict = () => {
                     enablePanDownToClose
                     animateOnMount
                 >
+                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: 500 }}>國民法官判決{verdictData?.month}個月</Text>
                     <BottomSheetScrollView>
                         {comments && comments.map((comment) => renderComment(comment))}
                     </BottomSheetScrollView>
@@ -822,7 +886,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     textTypo1: {
-        fontFamily: "PlusJakartaSans-Medium",
+        // fontFamily: "PlusJakartaSans-Medium",
         fontWeight: "500",
         lineHeight: 17,
         fontSize: 10,
@@ -845,7 +909,7 @@ const styles = StyleSheet.create({
     },
     textTypo: {
         fontSize: 14,
-        fontFamily: "PlusJakartaSans-Bold",
+        // fontFamily: "PlusJakartaSans-Bold",
         fontWeight: "700",
     },
     cardPosition: {
@@ -863,7 +927,7 @@ const styles = StyleSheet.create({
     tagTypo: {
         lineHeight: 21,
         fontSize: 12,
-        fontFamily: "PlusJakartaSans-Regular",
+        // fontFamily: "PlusJakartaSans-Regular",
     },
     cocoboldsavedIconLayout: {
         height: 24,
@@ -927,7 +991,7 @@ const styles = StyleSheet.create({
         left: "13.85%",
         fontSize: 9,
         lineHeight: 2,
-        fontFamily: "Inter-SemiBold",
+        // fontFamily: "Inter-SemiBold",
         textAlign: "center",
         color: "#fff",
         position: "relative",
@@ -968,7 +1032,7 @@ const styles = StyleSheet.create({
         lineHeight: 36,
         width: '100%',
         color: "#252525",
-        fontFamily: "PlusJakartaSans-Bold",
+        // fontFamily: "PlusJakartaSans-Bold",
         fontWeight: "700",
         display: "flex",
         position: "relative",
@@ -996,7 +1060,7 @@ const styles = StyleSheet.create({
         marginTop: 12,
         lineHeight: 24,
         width: 340,
-        fontFamily: "PlusJakartaSans-Regular",
+        // fontFamily: "PlusJakartaSans-Regular",
         fontSize: 14,
         color: "#252525",
         textAlign: "left",
@@ -1006,7 +1070,7 @@ const styles = StyleSheet.create({
     button: {
         fontSize: 12,
         textAlign: "left",
-        fontFamily: "PlusJakartaSans-Medium",
+        // fontFamily: "PlusJakartaSans-Medium",
         fontWeight: "500",
         color: "#fff",
     },
@@ -1186,7 +1250,7 @@ const styles = StyleSheet.create({
         left: 103,
         width: 183,
         fontSize: 14,
-        fontFamily: "PlusJakartaSans-Bold",
+        // fontFamily: "PlusJakartaSans-Bold",
         fontWeight: "700",
         color: "#999",
         display: "flex",
