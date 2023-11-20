@@ -208,7 +208,7 @@ export default function ButtonSheetScrollQuiz ({ access_token,verdictId} :any)  
                 <TouchableOpacity
                     onPress={handleNext}
                     style={{
-                        marginTop: 20, width: '100%', backgroundColor: COLORS.accent, padding: 20, borderRadius: 5
+                        marginTop: 20, width: '100%', backgroundColor: "COLORS.accent", padding: 20, borderRadius: 5
                     }}>
                     <Text style={{ fontSize: 20, color: COLORS.white, textAlign: 'center' }}>下一題</Text>
                 </TouchableOpacity>

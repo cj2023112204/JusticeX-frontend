@@ -516,7 +516,7 @@ const Verdict = () => {
 
     const fetchCommentsData = async () => {
         const accessToken = await AsyncStorage.getItem('access_token');
-        fetch(`${API_URL}/comment/get_comments/?email=test3@example.com&verdict_id=10&crime_id=1`, {
+        fetch(`${API_URL}/comment/get_comments/?email=test3@example.com&verdict_id=${verdictId}&crime_id=${crimeID}`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
