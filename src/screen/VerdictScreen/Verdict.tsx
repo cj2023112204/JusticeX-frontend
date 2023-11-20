@@ -30,6 +30,8 @@ const Verdict = () => {
     const [likesCount, setLikesCount] = useState(0);
     const [commentsCount, setCommentsCount] = useState(0);
     const [isLiked, setIsLiked] = useState(false);
+    const [coLike, setCoLike] = useState(false);
+    const [codisLike, setCodisLike] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const navigation = useNavigation();
     const bottomSheetRef = useRef<BottomSheet>(null);
@@ -384,6 +386,112 @@ const Verdict = () => {
     }
 
 
+    const likeComment = async (comment_id: any) => {
+
+        const accessToken = await AsyncStorage.getItem('access_token');
+
+        fetch(`${API_URL}/comment/add_like/`, { // Use the verdictId in the URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                comment_id: comment_id,
+            }),
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+                if (responseData.success) {
+                    // 更新按讚狀態
+                    console.log("讚")
+                    // console.log("讚");
+                    setCoLike((prevCoLike) => !prevCoLike);
+
+                } else {
+
+                    console.log(responseData.message);
+                    console.log('不贊', comment_id)
+                    fetch(`${API_URL}/comment/delete_like/`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                        body: JSON.stringify({
+                            comment_id: comment_id,
+                        }),
+                    })
+                        .then((response) => response.json())
+                        .then((responseData) => {
+                            setCoLike(false)
+                            console.log("不讚")
+                        })
+                        .catch((cancelSavedError) => {
+                            console.error(cancelSavedError);
+
+                        });
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                // 處理錯誤
+
+            });
+    };
+    const dislikeComment = async (comment_id: any) => {
+
+        const accessToken = await AsyncStorage.getItem('access_token');
+
+        fetch(`${API_URL}/comment/add_dislike/`, { // Use the verdictId in the URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                comment_id: comment_id,
+            }),
+        })
+            .then((response) => response.json())
+            .then((responseData) => {
+                if (responseData.success) {
+                    // 更新按讚狀態
+                    console.log("讚")
+                    // console.log("讚");
+                    setCodisLike((prevCodisLike) => !prevCodisLike);
+
+                } else {
+
+                    console.log(responseData.message);
+                    console.log('不贊', comment_id)
+                    fetch(`${API_URL}/comment/delete_dislike/`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${accessToken}`,
+                        },
+                        body: JSON.stringify({
+                            comment_id: comment_id,
+                        }),
+                    })
+                        .then((response) => response.json())
+                        .then((responseData) => {
+                            setCodisLike(false)
+                            console.log("不讚")
+                        })
+                        .catch((cancelSavedError) => {
+                            console.error(cancelSavedError);
+
+                        });
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+                // 處理錯誤
+
+            });
+    };
 
     const fetchVerdictData = async () => {
         const accessToken = await AsyncStorage.getItem('access_token');
@@ -408,7 +516,7 @@ const Verdict = () => {
 
     const fetchCommentsData = async () => {
         const accessToken = await AsyncStorage.getItem('access_token');
-        fetch(`${API_URL}/comment/get_comments/?email=example@example.com&verdict_id=10&crime_id=1`, {
+        fetch(`${API_URL}/comment/get_comments/?email=test3@example.com&verdict_id=10&crime_id=1`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
@@ -422,29 +530,99 @@ const Verdict = () => {
             });
     };
 
-    const replycomment = async () => {
+    const replycomment = async (comment_id: any, content: string) => {
         const accessToken = await AsyncStorage.getItem('access_token');
-        fetch(`${API_URL}`)
+        fetch(`${API_URL}/comment/add_reply/`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({
+                comment_id: comment_id,
+                content: content,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(`Replying to comment ${comment_id} with: ${content}`);
+                setReplyText('');
+                fetch(`${API_URL}/comment/get_comments/?email=example@example.com&verdict_id=10&crime_id=1`, {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        setComments(data.data || []);
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching comments:', error);
+                    });
+            })
+            .catch((error) => {
+                console.error('Error reply text:', error);
+            });
     }
 
     const renderComment = (comment) => (
         <View key={comment.comment_id} style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-            <Text>{comment.comment_email}</Text>
-            <Text>{comment.comment}</Text>
-            <TextInput
-                placeholder="Add a reply..."
-                value={replyText}
-                onChangeText={(text) => setReplyText(text)}
-                style={{ borderWidth: 1, borderColor: '#ccc', marginVertical: 8, padding: 8 }}
-            />
-            <View style={{ alignItems: 'center' }}>
-                <TouchableOpacity >
-                    <View style={{ backgroundColor: '#252525', width: 72, borderRadius: 12, padding: 12 }}>
-                        <Text style={{ color: '#ffffff', textAlign: 'center' }}>回覆</Text>
-                    </View>
-                </TouchableOpacity>
+            <Text>職業：{comment.job}</Text>
+            <View style={{ flex: 1, flexDirection: "row", justifyContent: 'center' }}>
+                <View style={{ flexDirection: "column" }}>
+
+
+                    <Text style={{ fontSize: 20, marginVertical: 10 }}>{comment.comment}</Text>
+
+                    {comment.replies.length > 0 && (
+                        <View style={{ marginLeft: 16 }}>
+                            {comment.replies.map((reply) => (
+                                <View key={reply.reply_id} style={{ flexDirection: 'row', marginTop: 8 }}>
+                                    <Text style={{ fontSize: 16 }}>職業：{reply.job} 回覆：{reply.reply}</Text>
+                                    {/* Add any additional reply information here */}
+                                </View>
+                            ))}
+                        </View>
+                    )}
+                </View>
+                <View style={{ flex: 1, alignItems: 'flex-end' }}>
+                    <TouchableOpacity onPress={() => { likeComment(comment.comment_id) }}>
+                        <MaterialCommunityIcons
+                            style={[styles.cocoboldsavedIconLayout, { marginBottom: 12 }]}
+                            size={24}
+                            name={coLike ? "heart" : "heart-plus-outline"}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { dislikeComment(comment.comment_id) }}>
+                        <MaterialCommunityIcons
+                            style={[styles.cocoboldsavedIconLayout, { marginBottom: 12 }]}
+                            size={24}
+                            name={codisLike ? "heart-broken" : "heart-broken-outline"}
+                        />
+                    </TouchableOpacity>
+                </View>
+
             </View>
 
+
+            <View style={{ flexDirection: "row", alignItems: 'center' }}>
+                <TextInput
+                    placeholder="Add a reply..."
+                    value={replyText}
+                    onChangeText={(text) => setReplyText(text)}
+                    style={{ width: '80%', borderWidth: 1, borderColor: '#ccc', marginVertical: 8, padding: 8, marginRight: 12, borderRadius: 16 }}
+                />
+
+                <View style={{ alignItems: 'center' }}>
+                    <TouchableOpacity onPress={() => { replycomment(comment.comment_id, replyText) }}>
+                        <View style={{ backgroundColor: '#252525', width: 72, borderRadius: 12, padding: 12 }}>
+                            <Text style={{ color: '#ffffff', textAlign: 'center' }}>回覆</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+            {/* 
             <Button
 
                 title="Reply"
@@ -452,7 +630,7 @@ const Verdict = () => {
                     // Handle the logic to add a reply here, e.g., call an API
                     console.log(`Replying to comment ${comment.comment_id} with: ${replyText}`);
                 }}
-            />
+            /> */}
         </View>
 
     );
@@ -661,7 +839,7 @@ const Verdict = () => {
                     enablePanDownToClose
                     animateOnMount
                 >
-                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: 500 }}>國民法官判決{verdictData?.month}個月</Text>
+                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: 800, color: '#252525' }}>國民法官判決 {verdictData?.month} 個月</Text>
                     <BottomSheetScrollView>
                         {comments && comments.map((comment) => renderComment(comment))}
                     </BottomSheetScrollView>

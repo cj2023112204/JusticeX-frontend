@@ -26,7 +26,8 @@ import Article from '../screen/Article';
 import IntroductionPage from '../screen/Introuduce';
 import React, { useLayoutEffect } from 'react';
 import SignOut from '../SignOut';
-import HomeTest from '../screen/HomeScreen/Home';
+import HomeHot from '../screen/HomeScreen/Home';
+import HomeLast from '../screen/HomeScreen/HomeLast';
 import chart from '../screen/Testchart';
 import Trend from '../screen/TrendScreen';
 import Verdict from '../screen/VerdictScreen';
@@ -45,8 +46,8 @@ const HomeTabs = () => {
       // tabBarItemStyle: { width: 100 },
       // tabBarStyle: { backgroundColor: 'powderblue' },
     }}>
-      <Tab.Screen name='熱門判例' component={HomeTest}/>
-      <Tab.Screen name='最新判例' component={HomeScreen}/>
+      <Tab.Screen name='熱門判例' component={HomeHot}/>
+      <Tab.Screen name='最新判例' component={HomeLast}/>
     </Tab.Navigator>
   )
 }
@@ -71,15 +72,15 @@ const HomeStack = () => {
 const DrawerNavigation = () => {
   return (
     <Drawer.Navigator initialRouteName="Home" screenOptions={{ headerShown: true }}>
-      <Drawer.Screen name="首頁" component={HomeStack} />
+      <Drawer.Screen name="首頁" component={HomeTabs} />
       <Drawer.Screen name="個人資料" component={ProfileScreen} />
       <Drawer.Screen name="收藏" component={FavoriteScreen} />
       <Drawer.Screen name="國民法官介紹" component={IntroductionPage}/>
       <Drawer.Screen name="犯罪特徵趨勢" component={Trend}/>
       <Drawer.Screen name="登出" component={SignOut} />
-      <Drawer.Screen name='主頁' component={HomeTabs}/>
+      {/* <Drawer.Screen name='主頁' component={HomeTabs}/>
       <Drawer.Screen name='測試圖表' component={chart}/>
-      <Drawer.Screen name="測試判例" component={Verdict}/>
+      <Drawer.Screen name="測試判例" component={Verdict}/> */}
     </Drawer.Navigator>
   )
 }
@@ -88,8 +89,6 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Verdict" component={Verdict} options={{title: '判例詳情' , headerShown: true}}/>
-
         {/* <Stack.Screen name='Quiz' component={QuizScreen} /> */}
         {/* <Stack.Screen name='Home' component={DrawerNavigation} />
         <Stack.Screen name="Verdict" component={Verdict} options={{title: '判例詳情' , headerShown: true}}/> */}
@@ -112,7 +111,7 @@ const Navigation = () => {
         <Stack.Screen name='VerifyCode' component={VerifyCodeScreen} />
         <Stack.Screen name='Quiz' component={QuizScreen}/>
         <Stack.Screen name="Comment" component={CommentScreen} />
-        {/* <Stack.Screen name="Verdict" component={Verdict} options={{title: '判例詳情' , headerShown: true}}/> */}
+        <Stack.Screen name="Verdict" component={Verdict} options={{title: '判例詳情' , headerShown: true}}/>
         <Stack.Screen name="Article" component={Article} options={{ title: '文章詳情' , headerShown: true}} />
       </Stack.Navigator>
     </NavigationContainer>

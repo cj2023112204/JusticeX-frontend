@@ -6,6 +6,8 @@ import CustomInput from '../components/CustomInput';
 import CustomButton from '../components/CustomButton';
 import { View, Dimensions, TextInput, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
+import AntDesign from 'react-native-vector-icons/AntDesign'
+import Entypo from 'react-native-vector-icons/Entypo'
 
 const ChangeAvatar = [
   { id: '1', source: require('../../assets/images/1.jpg') },
@@ -30,6 +32,11 @@ const ChangeAvatar = [
 
   // 添加其他照片的信息
 ];
+const genderdata = [
+  { label: '男', value: 'M' },
+  { label: '女', value: 'F' },
+];
+
 const data = [
   { label: '行政管理（管理幕僚、行政後勤/總務', value: '1' },
   { label: '金融與保險（金融保險、財務會計）', value: '2' },
@@ -69,14 +76,15 @@ const VerdictScreen = () => {
 
 
   // const { email }: any = route.params;
-  const [name, setname] = useState<string | null>(null);
-  const [gender, setgender] = useState<string | null>(null);
-  const [job_name, setJob_name] = useState<string | null>(null);
-  const [job_id, setjob_id] = useState<number>(11);
-  const [picture_id, setpicture_id] = useState<string | null>(null);
+  const [name, setname] = useState('');;
+  const [gender, setgender] = useState('');
+  const [job_name, setJob_name] = useState('');
+  const [job_id, setjob_id] = useState<number>();
+  const [picture_id, setpicture_id] = useState('');
   const [value, setValue] = useState<string>('');
   const [isFocus, setIsFocus] = useState(false);
-
+  const [isFocusG, setIsFocusG] = useState(false);
+  const [isFocusJ, setIsFocusJ] = useState(false);
   const onPressed = async () => {
     // console.warn('onSubmitPressed');
     const accessToken = await AsyncStorage.getItem('access_token');
@@ -157,17 +165,33 @@ const VerdictScreen = () => {
       </View>
     );
   }
+  const renderLabel = () => {
+    if (genderdata || isFocusG) {
+      return (
+        <Text style={[styles.labelG, isFocusG && { color: 'black' }]}>
+          性別
+        </Text>
+      );
+    }
+    return null;
+
+  };
+  const renderLabelJob = () => {
+    if (data || isFocusJ) {
+      return (
+        <Text style={[styles.labelG, isFocusJ && { color: 'black' }]}>
+          職業類別
+        </Text>
+      );
+    }
+    return null;
+  };
 
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.root}>
         <Text style={styles.title}>更改個人資料</Text>
 
-        <TouchableOpacity >
-          {imageData && <Image source={{ uri: imageData }} style={[
-            styles.avatar, { borderRadius: imageWidth / 2 },
-          ]} />}
-        </TouchableOpacity>
         {/* 頭像顯示 */}
         <View style={styles.selectedAvatarContainer}>
           {selectedAvatar ? (
@@ -208,8 +232,92 @@ const VerdictScreen = () => {
             ))}
           </View>
         )}
+        <View
+          style={{
+            flexDirection: 'row',
+            borderBottomColor: "gray",
+            borderBottomWidth: 1,
+            paddingBottom: 8,
+            marginBottom: 25,
+          }}>
+          <AntDesign
+            name='user'
+            size={20}
+            color="#666"
+            style={{ marginRight: 5 }}
+          />
+          <TextInput
+            placeholder={verdictData.name}
+            placeholderTextColor='gray'
+            value={name}
+            onChangeText={setname}
+            style={{ flex: 1, paddingVertical: 0 }}
+          />
+        </View>
+        <View style={styles.container}>
+          {renderLabel()}
+          <Dropdown
+            style={[styles.dropdown, isFocusG && { borderColor: 'black' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={genderdata}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={!verdictData.gender ? '性別' : '...'}
+            searchPlaceholder="Search..."
+            value={gender}
+            onFocus={() => setIsFocusG(true)}
+            onBlur={() => setIsFocusG(false)}
+            onChange={item => {
+              setgender(item.value);
+              setIsFocusG(false);
+            }}
+            renderLeftIcon={() => (
+              <AntDesign
+                style={styles.icon}
+                color={isFocusG ? 'black' : 'black'}
+                name="woman"
+                size={20}
+              />
+            )}
+          />
+        </View>
+        <View style={styles.container}>
+          {renderLabelJob()}
+          <Dropdown
+            style={[styles.dropdown, isFocusJ && { borderColor: 'black' }]}
+            placeholderStyle={styles.placeholderStyle}
+            selectedTextStyle={styles.selectedTextStyle}
+            inputSearchStyle={styles.inputSearchStyle}
+            iconStyle={styles.iconStyle}
+            data={data}
+            maxHeight={300}
+            labelField="label"
+            valueField="value"
+            placeholder={verdictData.job_name}// 设置初始文字
 
-        <CustomInput
+            // value={job_id ? job_id.toString() : null} // 将 job_id 转换为字符串
+            onFocus={() => setIsFocus(true)}
+            onBlur={() => setIsFocus(false)}
+            onChange={item => {
+              const job_id = parseInt(item.value); // 将字符串转换为数字
+              setjob_id(job_id);
+              setIsFocus(false);
+            }}
+            renderLeftIcon={() => (
+              <Entypo
+                style={styles.icon}
+                color={isFocusJ ? 'black' : 'black'}
+                name="suitcase"
+                size={20}
+              />
+            )}
+          />
+        </View>
+        {/* <CustomInput
           placeholder={verdictData.name}
           value={name}
           setValue={setname}
@@ -234,9 +342,9 @@ const VerdictScreen = () => {
             const job_id = parseInt(item.value); // 将字符串转换为数字
             setjob_id(job_id);
             setIsFocus(false);
-          }}
+          }} */}
 
-        />
+        {/* /> */}
 
         
         <CustomButton text="確定" onPress={onPressed} />
@@ -252,17 +360,10 @@ const VerdictScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    width: '100%',
-
-    borderColor: '#e8e8e8',
-    borderWidth: 1,
-    borderRadius: 5,
-
-    paddingHorizontal: 10,
-    marginVertical: 5,
-
+  root: {
+    alignItems: 'center',
+    padding: 20,
+    gap: 10
   },
   avatarOptionsContainer: {
     flexDirection: 'row',
@@ -278,31 +379,6 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
     borderRadius: 40,
     overflow: 'hidden',
-  },
-  label: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  dropdown: {//下拉式選單
-    height: 70,
-    width: "100%", // 增加宽度以容纳更长的文本
-    backgroundColor: 'white',
-    borderColor: 'gray',
-    borderWidth: 0.5,
-    borderRadius: 8,
-  },
-  selectedTextStyle: {//下拉式選單
-    fontSize: 16,
-    width: '100%',
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    lineHeight: 18, // 设置行高以适应两行文本
-    paddingHorizontal: 8,
-  },
-  selectedText: {
-    fontSize: 16,
-    marginTop: 10,
   },
   selectedAvatarOption: {
     borderColor: 'blue',
@@ -324,14 +400,10 @@ const styles = StyleSheet.create({
   toggleButton: {
     borderRadius: 5,
   },
-  toggleButtonText: {
-    color: 'black',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  root: {
-    alignItems: 'center',
-    padding: 20,
+  avatar: {
+    width: 100,
+    height: 100,
+
   },
   title: {
     fontSize: 24,
@@ -339,56 +411,78 @@ const styles = StyleSheet.create({
     color: '#051C60',
     margin: 10,
   },
-  loadingText: {
-    fontSize: 16,
-    textAlign: 'center',
-    marginTop: 16,
+  text: {
+    color: 'gray',
+    marginVertical: 10,
   },
-  Text: {
-    color: 'grey',
-    fontSize: 16,
-    marginTop: 15,
+  link: {
+    color: '#FDB075',
   },
-  avatar: {
-    width: 100,
-    height: 100,
-
-  },
-  name: {
-    marginLeft: 10,
-    fontSize: 25,
-    fontWeight: 'bold',
-  },
-  separator: {
-    height: 3,
-    width: 350,
-    backgroundColor: 'black',
-    marginHorizontal: 20,
-    marginTop: 10,
-    marginBottom: 10,
-  },
-  buttonContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  button: {
-    width: 350,
-    paddingVertical: 10,
-  },
-  favoriteButton: {
-    width: 350,
-    paddingVertical: 10,
-  },
-  TextTitle: {
-    color: 'black',
-    fontSize: 16,
-    marginLeft: 15,
-  },
-  verdictTitle: {
+  label: {
     fontSize: 18,
-    lineHeight: 24,
-    marginLeft: 10,
+    fontWeight: 'bold',
+    marginBottom: 5,
   },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 10,
+  },
+  container: {
+    backgroundColor: '#f2f2f2',
+    padding: 16,
+    right: 10,
+    width: "105%"
+  },
+  dropdown: {
+    height: 50,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 8,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  labelG: {
+    position: 'absolute',
+    backgroundColor: '#f2f2f2',
+    left: 22,
+    top: 8,
+    zIndex: 999,
+    paddingHorizontal: 8,
+    fontSize: 14,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  // fontSize: 16,
+  inputSearchStyle: {
+    height: 40,
+  },
+  //   container: {
+  //     backgroundColor: 'white',
+  //     width: '100%',
+    //     borderColor: '#e8e8e8',
+  //     borderWidth: 1,
+  //     borderRadius: 5,
+    //     paddingHorizontal: 10,
+  //     marginVertical: 5,
+//   },
+loadingText: {
+  fontSize: 16,
+  textAlign: 'center',
+
+},
 });
 
 export default VerdictScreen;

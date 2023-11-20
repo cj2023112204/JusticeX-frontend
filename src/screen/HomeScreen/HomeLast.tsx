@@ -55,7 +55,6 @@ const Home = () => {
     }
   };
   
-  
   useEffect(() => {
     getData();
   }, []);
@@ -72,7 +71,7 @@ const Home = () => {
     const nextPage = Math.floor(data.length / 10) + 1;
     const accessToken = await AsyncStorage.getItem('access_token');
     // console.log("hi");
-    fetch(`${API_URL}/verdict/get_verdicts/?page=1&is_latest=0`, {
+    fetch(`${API_URL}/verdict/get_verdicts/?page=1&is_latest=1`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       }
