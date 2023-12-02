@@ -97,8 +97,8 @@ const TrendScreen = () => {
 
     const chartConfig = {
         backgroundColor: '#022173',
-        backgroundGradientFrom: '#022173',
-        backgroundGradientTo: '#1b3fa0',
+        // backgroundGradientFrom: '#022173',
+        // backgroundGradientTo: '#1b3fa0',
         color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
         style: {
             borderRadius: 16,
@@ -118,7 +118,7 @@ const TrendScreen = () => {
                     <TouchableOpacity
                         style={{
                             backgroundColor: selectedTag === index ? "#252525" : "#E6E6E6",
-                            paddingHorizontal: 10,  // 標籤的水平內邊距
+                            paddingHorizontal: 20,  // 標籤的水平內邊距
                             paddingVertical: 5,   // 標籤的垂直內邊距
                             borderRadius: 20,     // 圓角半徑，使其呈現圓形外觀
                             margin: 10,           // 標籤之間的外邊距
@@ -143,7 +143,7 @@ const TrendScreen = () => {
             {/* 渲染图表 */}
             {data && (
                 <View>
-                    <Text>选定的罪名: {labels[crimeIds.indexOf(selectedCrime)]}</Text>
+                    {/* <Text>选定的罪名: {labels[crimeIds.indexOf(selectedCrime)]}</Text> */}
                     <View style={styles.chartcontainer}>
                         <BarChart
                             data={data}

@@ -122,13 +122,13 @@ export default function ButtonSheetScrollQuiz ({ access_token,verdictId} :any)  
                     flexDirection: 'row',
                     alignItems: 'flex-end'
                 }}>
-                    <Text style={{ color: COLORS.white, fontSize: 20, opacity: 0.6, marginRight: 2 }}>{currentQuestionIndex + 1}</Text>
-                    <Text style={{ color: COLORS.white, fontSize: 18, opacity: 0.6 }}>/ {allQuestions[1].length}</Text>
+                    <Text style={{ color: COLORS.black, fontSize: 20, opacity: 0.6, marginRight: 2 }}>{currentQuestionIndex + 1}</Text>
+                    <Text style={{ color: COLORS.black, fontSize: 18, opacity: 0.6 }}>/ {allQuestions[1].length}</Text>
                 </View>
 
                 {/* Question */}
                 <Text style={{
-                    color: COLORS.white,
+                    color: COLORS.black,
                     fontSize: 30
                 }}>{allQuestions[1][currentQuestionIndex]?.question}</Text>
             </View>
@@ -159,7 +159,7 @@ export default function ButtonSheetScrollQuiz ({ access_token,verdictId} :any)  
                                 //     : option == currentOptionSelected
                                 //         ? COLORS.error + '20'
                                 //         : 
-                                        COLORS.secondary + '20',
+                                        COLORS.white + '20',
                                 height: 60, borderRadius: 20,
                                 flexDirection: 'row',
                                 alignItems: 'center', justifyContent: 'space-between',
@@ -167,7 +167,7 @@ export default function ButtonSheetScrollQuiz ({ access_token,verdictId} :any)  
                                 marginVertical: 10
                             }}
                         >
-                            <Text style={{ fontSize: 20, color: COLORS.white }}>{option}</Text>
+                            <Text style={{ fontSize: 20, color: COLORS.black }}>{option}</Text>
 
                             {/* Show Check Or Cross Icon based on correct answer*/}
                             {/* {
@@ -208,9 +208,9 @@ export default function ButtonSheetScrollQuiz ({ access_token,verdictId} :any)  
                 <TouchableOpacity
                     onPress={handleNext}
                     style={{
-                        marginTop: 20, width: '100%', backgroundColor: "COLORS.accent", padding: 20, borderRadius: 5
+                        marginTop: 20, width: '100%', backgroundColor: COLORS.accent,padding: 20, borderRadius: 5
                     }}>
-                    <Text style={{ fontSize: 20, color: COLORS.white, textAlign: 'center' }}>下一題</Text>
+                    <Text style={{ fontSize: 20, color: COLORS.black, textAlign: 'center' }}>下一題</Text>
                 </TouchableOpacity>
             )
         } else {
@@ -316,7 +316,7 @@ export default function ButtonSheetScrollQuiz ({ access_token,verdictId} :any)  
                                     padding: 20, width: '100%', borderRadius: 20
                                 }}>
                                 <Text style={{
-                                    textAlign: 'center', color: COLORS.white, fontSize: 20
+                                    textAlign: 'center', color: COLORS.black, fontSize: 20
                                 }}>留言</Text>
                             </TouchableOpacity>
 
@@ -326,7 +326,7 @@ export default function ButtonSheetScrollQuiz ({ access_token,verdictId} :any)  
                 </Modal>
 
                 {/* Background Image */}
-                <Image
+                {/* <Image
                     source={require('../../../assets/images/DottedBG.png')}
                     style={{
                         width: SIZES.width,
@@ -339,7 +339,7 @@ export default function ButtonSheetScrollQuiz ({ access_token,verdictId} :any)  
                         opacity: 0.5
                     }}
                     resizeMode={'contain'}
-                />
+                /> */}
 
             </View>
         </SafeAreaView>
