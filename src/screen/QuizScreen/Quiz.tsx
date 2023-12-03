@@ -101,13 +101,13 @@ const Quiz = ({ access_token }: any) => {
                     flexDirection: 'row',
                     alignItems: 'flex-end'
                 }}>
-                    <Text style={{ color: COLORS.white, fontSize: 20, opacity: 0.6, marginRight: 2 }}>{currentQuestionIndex + 1}</Text>
-                    <Text style={{ color: COLORS.white, fontSize: 18, opacity: 0.6 }}>/ {allQuestions.length}</Text>
+                    <Text style={{ color: COLORS.black, fontSize: 20, opacity: 0.6, marginRight: 2 }}>{currentQuestionIndex + 1}</Text>
+                    <Text style={{ color: COLORS.black, fontSize: 18, opacity: 0.6 }}>/ {allQuestions.length}</Text>
                 </View>
 
                 {/* Question */}
                 <Text style={{
-                    color: COLORS.white,
+                    color: COLORS.black,
                     fontSize: 30
                 }}>{allQuestions[currentQuestionIndex]?.question}</Text>
             </View>
@@ -128,12 +128,12 @@ const Quiz = ({ access_token }: any) => {
                                     ? COLORS.success
                                     : option == currentOptionSelected
                                         ? COLORS.error
-                                        : COLORS.secondary + '40',
+                                        : COLORS.black + '40',
                                 backgroundColor: option == correctOption
                                     ? COLORS.success + '20'
                                     : option == currentOptionSelected
                                         ? COLORS.error + '20'
-                                        : COLORS.secondary + '20',
+                                        : COLORS.white + '20',
                                 height: 60, borderRadius: 20,
                                 flexDirection: 'row',
                                 alignItems: 'center', justifyContent: 'space-between',
@@ -141,7 +141,7 @@ const Quiz = ({ access_token }: any) => {
                                 marginVertical: 10
                             }}
                         >
-                            <Text style={{ fontSize: 20, color: COLORS.white }}>{option}</Text>
+                            <Text style={{ fontSize: 20, color: COLORS.black }}>{option}</Text>
 
                             {/* Show Check Or Cross Icon based on correct answer*/}
                             {
@@ -152,7 +152,7 @@ const Quiz = ({ access_token }: any) => {
                                         justifyContent: 'center', alignItems: 'center'
                                     }}>
                                         <MaterialCommunityIcons name="check" style={{
-                                            color: COLORS.white,
+                                            color: COLORS.black,
                                             fontSize: 20
                                         }} />
                                     </View>

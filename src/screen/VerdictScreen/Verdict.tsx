@@ -44,6 +44,7 @@ const Verdict = () => {
     const bottomSheetRef4 = useRef<BottomSheet>(null);
     const bottomSheetRef5 = useRef<BottomSheet>(null);
     const [is_money_related, setis_money_related] = useState(false);
+    const [isBottomSheetReady, setIsBottomSheetReady] = useState(false);
 
     const pressHandler2 = useCallback((crimeID: any) => {
         console.log(verdictId)
@@ -64,7 +65,10 @@ const Verdict = () => {
         fetchVerdictData();
         fetchRecommendations();
         fetchCommentsData();
-    }, []);
+        if(isBottomSheetReady){
+            fetchCommentsData();
+        }
+    }, [isBottomSheetReady]);
 
     useFocusEffect(
         React.useCallback(() => {
@@ -507,6 +511,7 @@ const Verdict = () => {
                 setLikesCount(responseData.data.total_like);
                 setCommentsCount(responseData.data.total_comment);
                 setcrimeID(responseData.data.crime_id);
+                setIsBottomSheetReady(true);
             })
 
             .catch((error) => {
@@ -547,7 +552,7 @@ const Verdict = () => {
             .then((data) => {
                 console.log(`Replying to comment ${comment_id} with: ${content}`);
                 setReplyText('');
-                fetch(`${API_URL}/comment/get_comments/?email=example@example.com&verdict_id=10&crime_id=1`, {
+                fetch(`${API_URL}/comment/get_comments/?email=example@example.com&verdict_id=${verdictId}&crime_id=${crimeID}`, {
                     headers: {
                         Authorization: `Bearer ${accessToken}`,
                     },
@@ -569,10 +574,10 @@ const Verdict = () => {
         <View key={comment.comment_id} style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
             <Text>職業：{comment.job}</Text>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: 'center' }}>
-                <View style={{ flexDirection: "column" }}>
+                <View style={{ flexDirection: "column",width:"90%" }}>
 
 
-                    <Text style={{ fontSize: 20, marginVertical: 10 }}>{comment.comment}</Text>
+                    <Text style={{ fontSize: 16, marginVertical: 10 }}>{comment.comment}</Text>
 
                     {comment.replies.length > 0 && (
                         <View style={{ marginLeft: 16 }}>
@@ -634,6 +639,7 @@ const Verdict = () => {
         </View>
 
     );
+    
 
     const handleToggleIncidentType = () => {
         setIncidentType(incidentType === 'incident' ? 'incident_lite' : 'incident');
@@ -835,6 +841,7 @@ const Verdict = () => {
                     ref={combottomSheetRef}
                     index={-1}
                     snapPoints={['10%', '50%']}
+                    // onChange={renderComment}
                     style={styles.bottomSheet}
                     enablePanDownToClose
                     animateOnMount
