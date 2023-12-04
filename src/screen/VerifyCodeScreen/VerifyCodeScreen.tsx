@@ -70,7 +70,7 @@ const ConfirmEmailScreen = ({ route }: any) => {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.root}>
-                <Text style={styles.title}>Confirm your email</Text>
+                <Text style={styles.title}>確認您的信箱</Text>
 
                 <CustomInput
                     placeholder="Email"
@@ -79,22 +79,22 @@ const ConfirmEmailScreen = ({ route }: any) => {
                 />
 
                 <CustomInput
-                    placeholder="Enter your confirmation code"
+                    placeholder="輸入您的驗證碼"
                     value={code}
                     setValue={setCode}
                 />
                 
 
-                <CustomButton text="Confirm" onPress={onConfirmPressed} />
+                <CustomButton text="送出" onPress={onConfirmPressed} />
 
                 <CustomButton
-                    text="Resend code"
+                    text="重新發送驗證碼"
                     onPress={onResendPressed}
                     type="SECONDARY"
                 />
 
                 <CustomButton
-                    text="Back to Sign in"
+                    text="回到登入"
                     onPress={onSignInPressed}
                     type="TERTIARY"
                 />
