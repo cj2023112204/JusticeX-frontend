@@ -56,7 +56,7 @@ const ResetPasswordScreen = ({ route }: any) => {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
             <View style={styles.root}>
-                <Text style={styles.title}>Reset your password</Text>
+                <Text style={styles.title}>重設密碼</Text>
 
                 {/* <CustomInput
                     placeholder="Code"
@@ -71,16 +71,16 @@ const ResetPasswordScreen = ({ route }: any) => {
                 />
 
                 <CustomInput
-                    placeholder="Enter your new password"
+                    placeholder="輸入您的新密碼"
                     value={password}
                     setValue={setPassword}
                 />
 
 
-                <CustomButton text="Submit" onPress={onSubmitPressed} />
+                <CustomButton text="送出" onPress={onSubmitPressed} />
 
                 <CustomButton
-                    text="Back to Sign in"
+                    text="回到登入"
                     onPress={onSignInPressed}
                     type="TERTIARY"
                 />

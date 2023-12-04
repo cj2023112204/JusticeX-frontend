@@ -50,6 +50,7 @@ const Quiz = ({ access_token }: any) => {
         }).start();
     }
     const doneQuiz = async () => {
+        setShowScoreModal(false)
         const accessToken = await AsyncStorage.getItem('access_token');
         //const previousValue = await AsyncStorage.getItem('is_quiz');
         const newValue = 'true';
