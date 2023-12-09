@@ -139,32 +139,38 @@ const TrendScreen = () => {
                 ))}
             </ScrollView>
 
+            <ScrollView horizontal={true}>
 
-            {/* 渲染图表 */}
-            {data && (
-                <View>
-                    {/* <Text>选定的罪名: {labels[crimeIds.indexOf(selectedCrime)]}</Text> */}
-                    <View style={styles.chartcontainer}>
-                        <BarChart
-                            data={data}
-                            width={width * 0.98}
-                            height={600}
-                            yAxisLabel=""
-                            chartConfig={chartConfig}
-                            yAxisSuffix='%'
-                            verticalLabelRotation={90}
-                            yLabelsOffset={20}
-                            xLabelsOffset={10}
-                            // showValuesOnTopOfBars	
-                            style={{
-                                marginVertical: 8,
-                                borderRadius: 16,
-                            }}
-                        />
-                    </View>
 
+                <View style={{ width: width * 1.5 ,flexDirection: 'row',height: height}}>
+                    {data && (
+                        <View>
+                            {/* <Text>选定的罪名: {labels[crimeIds.indexOf(selectedCrime)]}</Text> */}
+                            <View style={styles.chartcontainer}>
+                                <BarChart
+                                    data={data}
+                                    width={width * 1.5}
+                                    height={height}
+                                    yAxisLabel=""
+                                    chartConfig={chartConfig}
+                                    yAxisSuffix='%'
+                                    // verticalLabelRotation={45}
+                                    yLabelsOffset={0}
+                                    xLabelsOffset={0}
+                                    // showValuesOnTopOfBars	
+                                    style={{
+                                        marginVertical: 8,
+                                        // borderRadius: 16,
+                                    }}
+                                />
+                            </View>
+
+                        </View>
+                    )}
                 </View>
-            )}
+            </ScrollView>
+            {/* 渲染图表 */}
+
         </View>
     );
 };

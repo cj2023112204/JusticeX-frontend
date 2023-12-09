@@ -22,7 +22,8 @@ const Verdict = () => {
     const route = useRoute();
     const { height, width } = Dimensions.get('window');
     const [incidentType, setIncidentType] = useState('incident');
-    const verdictId = route.params?.verdictId;
+    const [incidentTypeText, setIncidentTypeText] = useState('AI摘要');
+    let verdictId = route.params?.verdictId;
     const [verdictData, setVerdictData] = useState(null);
     const [Firstrecommendations, setFirstRecommendations] = useState(null);
     const [Secondrecommendations, setSecondRecommendations] = useState(null);
@@ -65,7 +66,7 @@ const Verdict = () => {
         fetchVerdictData();
         fetchRecommendations();
         fetchCommentsData();
-        if(isBottomSheetReady){
+        if (isBottomSheetReady) {
             fetchCommentsData();
         }
     }, [isBottomSheetReady]);
@@ -186,7 +187,7 @@ const Verdict = () => {
                 title: '是否為金錢相關',
                 name: '是',
                 population: chartData && chartData[0] && chartData[0].is_money_related ? chartData[0].is_money_related : 0,
-                color: '#f00',
+                color: '#121212',
                 legendFontColor: '#000',
                 legendFontSize: 12,
             },
@@ -203,7 +204,7 @@ const Verdict = () => {
                 title: '是否有遺棄贓物',
                 name: '有',
                 population: chartData && chartData[0] && chartData[0].is_abandoned ? chartData[0].is_abandoned : 0,
-                color: '#f00',
+                color: '#121212',
                 legendFontColor: '#000',
                 legendFontSize: 12,
             },
@@ -220,7 +221,7 @@ const Verdict = () => {
                 title: '犯罪地點為室內',
                 name: '是',
                 population: chartData && chartData[0] && chartData[0].is_indoor ? chartData[0].is_indoor : 0,
-                color: '#f00',
+                color: '#121212',
                 legendFontColor: '#000',
                 legendFontSize: 12,
             },
@@ -237,7 +238,7 @@ const Verdict = () => {
                 title: '竊盜方法具破壞性	',
                 name: '是',
                 population: chartData && chartData[0] && chartData[0].is_destructive ? chartData[0].is_destructive : 0,
-                color: '#f00',
+                color: '#121212',
                 legendFontColor: '#000',
                 legendFontSize: 12,
             },
@@ -254,7 +255,7 @@ const Verdict = () => {
                 title: '兩人以上(含)犯案',
                 name: '是',
                 population: chartData && chartData[0] && chartData[0].is_group_crime ? chartData[0].is_group_crime : 0,
-                color: '#f00',
+                color: '#121212',
                 legendFontColor: '#000',
                 legendFontSize: 12,
             },
@@ -271,7 +272,7 @@ const Verdict = () => {
                 title: '利用交通工具輸送贓物	',
                 name: '是',
                 population: chartData && chartData[0] && chartData[0].is_transportation_used ? chartData[0].is_transportation_used : 0,
-                color: '#f00',
+                color: '#121212',
                 legendFontColor: '#000',
                 legendFontSize: 12,
             },
@@ -288,7 +289,7 @@ const Verdict = () => {
                 title: '是否有前科紀錄',
                 name: '有',
                 population: chartData && chartData[0] && chartData[0].has_criminal_record ? chartData[0].has_criminal_record : 0,
-                color: '#f00',
+                color: '#121212',
                 legendFontColor: '#000',
                 legendFontSize: 12,
             },
@@ -305,7 +306,7 @@ const Verdict = () => {
                 title: '竊取之財物為被害人生財工具',
                 name: '是',
                 population: chartData && chartData[0] && chartData[0].is_income_tool ? chartData[0].is_income_tool : 0,
-                color: '#f00',
+                color: '#121212',
                 legendFontColor: '#000',
                 legendFontSize: 12,
             },
@@ -497,6 +498,29 @@ const Verdict = () => {
             });
     };
 
+    const FRPress = () => {
+        if (Firstrecommendations) {
+            // 调用 API 并传递 verdict_id
+            verdictId = Firstrecommendations?.verdict_id
+            fetchVerdictData();
+        }
+    };
+
+    const SEPress = () => {
+        if (Secondrecommendations) {
+          // 调用 API 并传递 verdict_id
+          verdictId=Secondrecommendations?.verdict_id
+          fetchVerdictData();
+        }
+      };
+
+      const ThPress = () => {
+        if (Thirdrecommendations) {
+          // 调用 API 并传递 verdict_id
+          verdictId=Thirdrecommendations?.verdict_id
+          fetchVerdictData();
+        }
+      };
     const fetchVerdictData = async () => {
         const accessToken = await AsyncStorage.getItem('access_token');
         fetch(`${API_URL}/verdict/get_verdict/?verdict_id=${verdictId}`, { // Use the verdictId in the URL
@@ -512,6 +536,8 @@ const Verdict = () => {
                 setCommentsCount(responseData.data.total_comment);
                 setcrimeID(responseData.data.crime_id);
                 setIsBottomSheetReady(true);
+                fetchRecommendations();
+                fetchCommentsData();
             })
 
             .catch((error) => {
@@ -522,7 +548,7 @@ const Verdict = () => {
     const fetchCommentsData = async () => {
         const accessToken = await AsyncStorage.getItem('access_token');
         const email = await AsyncStorage.getItem('email');
-        console.log('email:',email)
+        console.log('email:', email)
         fetch(`${API_URL}/comment/get_comments/?email=test3@example.com&verdict_id=${verdictId}&crime_id=${crimeID}`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -576,7 +602,7 @@ const Verdict = () => {
         <View key={comment.comment_id} style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
             <Text>職業：{comment.job}</Text>
             <View style={{ flex: 1, flexDirection: "row", justifyContent: 'center' }}>
-                <View style={{ flexDirection: "column",width:"90%" }}>
+                <View style={{ flexDirection: "column", width: "90%" }}>
 
 
                     <Text style={{ fontSize: 16, marginVertical: 10 }}>{comment.comment}</Text>
@@ -595,14 +621,14 @@ const Verdict = () => {
                 <View style={{ flex: 1, alignItems: 'flex-end' }}>
                     <TouchableOpacity onPress={() => { likeComment(comment.comment_id) }}>
                         <MaterialCommunityIcons
-                            style={[styles.cocoboldsavedIconLayout, { marginBottom: 12 }]}
+                            style={[styles.cocoboldsavedIconLayout, { marginBottom: 12, color: coLike ? "red" : "black" }]}
                             size={24}
                             name={coLike ? "heart" : "heart-plus-outline"}
                         />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { dislikeComment(comment.comment_id) }}>
                         <MaterialCommunityIcons
-                            style={[styles.cocoboldsavedIconLayout, { marginBottom: 12 }]}
+                            style={[styles.cocoboldsavedIconLayout, { marginBottom: 12, color: codisLike ? "red" : "black" }]}
                             size={24}
                             name={codisLike ? "heart-broken" : "heart-broken-outline"}
                         />
@@ -641,10 +667,12 @@ const Verdict = () => {
         </View>
 
     );
-    
+
 
     const handleToggleIncidentType = () => {
         setIncidentType(incidentType === 'incident' ? 'incident_lite' : 'incident');
+        const newIncidentType = incidentTypeText === 'AI 摘要' ? '原始判例' : 'AI 摘要';
+        setIncidentTypeText(newIncidentType);
     };
 
     const fetchRecommendations = async () => {
@@ -666,7 +694,7 @@ const Verdict = () => {
             });
     };
 
-
+    const navigaterecom = () => { }
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -716,7 +744,7 @@ const Verdict = () => {
 
                     <TouchableOpacity onPress={handleToggleIncidentType}>
                         <View style={[styles.primaryButton, styles.primarySpaceBlock]}>
-                            <Text style={styles.button}>AI 摘要</Text>
+                            <Text style={styles.button}>{incidentTypeText}</Text>
                         </View>
                     </TouchableOpacity>
                     <Text
@@ -748,7 +776,8 @@ const Verdict = () => {
 
                     <TouchableOpacity
                         style={{ flex: 1, alignItems: "center", paddingTop: 21, paddingBottom: 10 }}
-                        onPress={() => navigation.navigate('Verdict', { verdictId: Firstrecommendations?.verdict_id })}
+                        onPress={FRPress}
+                    // onPress={() => navigation.navigate('Verdict', { verdictId: Firstrecommendations?.verdict_id })}
                     >
                         <Card
                             title={Firstrecommendations?.title}
@@ -760,7 +789,8 @@ const Verdict = () => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{ flex: 1, alignItems: "center", paddingTop: 21, paddingBottom: 10 }}
-                        onPress={() => navigation.navigate('Verdict', { verdictId: Secondrecommendations?.verdict_id })}
+                        onPress={SEPress}
+                        // onPress={() => navigation.navigate('Verdict', { verdictId: Secondrecommendations?.verdict_id })}
                     >
                         <Card
                             title={Secondrecommendations?.title}
@@ -772,7 +802,8 @@ const Verdict = () => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={{ flex: 1, alignItems: "center", paddingTop: 21, paddingBottom: 10 }}
-                        onPress={() => navigation.navigate('Verdict', { verdictId: Thirdrecommendations?.verdict_id })}
+                        onPress={ThPress}
+                        // onPress={() => navigation.navigate('Verdict', { verdictId: Thirdrecommendations?.verdict_id })}
                     >
                         <Card
                             title={Thirdrecommendations?.title}
@@ -820,7 +851,7 @@ const Verdict = () => {
                     <View style={[styles.frameView, styles.profileFlexBox]}>
                         <TouchableOpacity onPress={handleLike}>
                             <MaterialCommunityIcons
-                                style={styles.cocoboldsavedIconLayout}
+                                style={[styles.cocoboldsavedIconLayout, { color: isLiked ? "red" : "black" }]}
                                 size={24}
                                 name={isLiked ? "heart" : "heart-plus-outline"}
                             />
@@ -830,7 +861,7 @@ const Verdict = () => {
                 </View>
                 <BottomSheetScrollView2
                     ref={bottomSheetRef2}
-                    snapTo={'50%'}
+                    snapTo={'70%'}
                     backgroundColor='white'
                     backDropColor='black'
                 >
@@ -842,13 +873,13 @@ const Verdict = () => {
                 <BottomSheet
                     ref={combottomSheetRef}
                     index={-1}
-                    snapPoints={['10%', '50%']}
+                    snapPoints={['30%', '70%']}
                     // onChange={renderComment}
                     style={styles.bottomSheet}
                     enablePanDownToClose
                     animateOnMount
                 >
-                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: 800, color: '#252525' }}>國民法官判決 {verdictData?.month} 個月</Text>
+                    <Text style={{ fontSize: 20, textAlign: 'center', fontWeight: 800, color: '#252525' }}>本案結果：判決 {verdictData?.month} 個月</Text>
                     <BottomSheetScrollView>
                         {comments && comments.map((comment) => renderComment(comment))}
                     </BottomSheetScrollView>
@@ -857,7 +888,7 @@ const Verdict = () => {
                 <BottomSheet
                     ref={bottomSheetRef}
                     index={-1}
-                    snapPoints={['10%', '50%']}
+                    snapPoints={['30%', '70%']}
                     containerStyle={styles.bottomSheet}
                     enablePanDownToClose
                     animateOnMount
@@ -1086,7 +1117,7 @@ const styles = StyleSheet.create({
     primarySpaceBlock: {
         paddingVertical: 9,
         paddingHorizontal: 16,
-        width: 72,
+        width: 90,
         justifyContent: "center",
     },
     dividerIconPosition: {
@@ -1268,7 +1299,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#252525",
         paddingVertical: 9,
         paddingHorizontal: 16,
-        width: 72,
+        width: 90,
         alignItems: "center",
         position: "relative",
     },
