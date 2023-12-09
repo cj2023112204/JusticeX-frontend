@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList,Platform, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
+import { FlatList, Platform, StyleSheet, Text, TouchableOpacity, View, Dimensions } from 'react-native';
 import Article from './Article';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -84,7 +84,7 @@ const FavoriteScreen = () => {
       <TouchableOpacity
         key={index.toString()}
         style={{ flex: 1, alignItems: "center", paddingTop: 21, paddingBottom: 10 }}
-        onPress={() => navigation.navigate('Verdict', { verdictId: item.verdict_id } )}
+        onPress={() => navigation.navigate('Verdict', { verdictId: item.verdict_id })}
       >
         <Card
           title={item.title}
@@ -99,12 +99,8 @@ const FavoriteScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* <FlatList
-        data={filteredArticles}
-        renderItem={renderArticleItem}
-        keyExtractor={(item, index) => `${item.title}-${index}`}
-      /> */}
-<FlatList
+
+      <FlatList
         ListEmptyComponent={<Text>No data available</Text>}
         data={filteredArticles}
         renderItem={({ item, index }) => (<CardItem item={item} index={index} />)}
