@@ -34,7 +34,7 @@ const BottomSheetScroll = () => {
 
                     <BottomSheet
                         ref={bottomSheetRef}
-                        snapTo={'50%'}
+                        snapTo={'70%'}
                         backgroundColor='white'
                         backDropColor='black'
                     >
@@ -43,7 +43,7 @@ const BottomSheetScroll = () => {
 
                     <BottomSheetScrollView2
                         ref={bottomSheetRef2}
-                        snapTo={'50%'}
+                        snapTo={'70%'}
                         backgroundColor='white'
                         backDropColor='black'
                         
