@@ -1245,7 +1245,8 @@ const styles = StyleSheet.create({
     },
     text: {
         marginTop: 12,
-        left: 24,
+        marginLeft: 24,
+        paddingRight:24,
         fontSize: 26,
         lineHeight: 36,
         width: '100%',
