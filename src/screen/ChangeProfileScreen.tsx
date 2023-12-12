@@ -465,11 +465,19 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
   },
-  
+  // fontSize: 16,
   inputSearchStyle: {
     height: 40,
   },
-
+  //   container: {
+  //     backgroundColor: 'white',
+  //     width: '100%',
+    //     borderColor: '#e8e8e8',
+  //     borderWidth: 1,
+  //     borderRadius: 5,
+    //     paddingHorizontal: 10,
+  //     marginVertical: 5,
+//   },
 loadingText: {
   fontSize: 16,
   textAlign: 'center',

@@ -2,14 +2,10 @@ import React, { useEffect, useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { API_URL } from '../../config';
+import { useFocusEffect } from '@react-navigation/native';
 
-import { View, Dimensions, Text, TouchableOpacity, StyleSheet, ScrollView, Image, } from 'react-native';
 
-// interface ResponseData {
-//   data: {
-//     picture: string;
-//   }
-// }
+import { View, Dimensions, Text, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native';
 
 const VerdictScreen = () => {
   const navigation = useNavigation();
@@ -28,93 +24,61 @@ const VerdictScreen = () => {
     navigation.navigate('ChangeProfile' as never); // Remove unnecessary type casting
   };
 
-  // const fetchVerdictData = async () => {
-  //   try {
-  //     const accessToken = await AsyncStorage.getItem('access_token');
-  //     const response = await fetch(`${API_URL}/account/get_account/`, {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     });
-  //     const responseData = await response.json();
-  
-  //     setVerdictData(responseData.data);
-  //     decodeImage(responseData.data.picture);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-  
-
   useEffect(() => {
     fetchVerdictData();
   }, []);
 
-  const fetchVerdictData = async () => {
-    const accessToken = await AsyncStorage.getItem('access_token');
-    fetch(`${API_URL}/account/get_account/`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((responseData) => {
-        fetchVerdictData();
-        setVerdictData(responseData.data);
-        decodeImage(responseData.data.picture);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-
   // const fetchVerdictData = async () => {
   //   const accessToken = await AsyncStorage.getItem('access_token');
-  //   const response = await fetch(`${API_URL}/account/get_account/`, {
+  //   fetch(`${API_URL}/account/get_account/`, {
   //     headers: {
   //       Authorization: `Bearer ${accessToken}`,
   //     },
   //   })
-  //   const responseData: ResponseData = await response.json();
-  
-  //   if(responseData.data && responseData.data.picture) {
-  //     decodeImage(responseData.data.picture);
-  //   }
-  // }
-
-  // const fetchVerdictData = async () => {
-  //   try {
-  //     const accessToken = await AsyncStorage.getItem('access_token');
-  //     const response = await fetch(`${API_URL}/account/get_account/`, {
-  //       headers: {
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
+  //     .then((response) => response.json())
+  //     .then((responseData) => {
+  //       fetchVerdictData();
+  //       setVerdictData(responseData.data);
+  //       decodeImage(responseData.data.picture);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
   //     });
-  //     const responseData = await response.json();
-  
-  //     setVerdictData(responseData.data);
-  //     decodeImage(responseData);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
   // };
+
+  const fetchVerdictData = async () => {
+    try {
+      const accessToken = await AsyncStorage.getItem('access_token');
+      const response = await fetch(`${API_URL}/account/get_account/`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+  
+      if (!response.ok) {
+        console.error('Failed to fetch data:', response.status, response.statusText);
+        return;
+      }
+  
+      const responseData = await response.json();
+      setVerdictData(responseData.data);
+      decodeImage(responseData.data.picture);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+  
 
   const decodeImage = (base64Data: string) => {
     const imageData = `data:image/jpeg;base64,${base64Data}`;
     setImageData(imageData);
   };
-  
 
-  // const decodeImage = (responseData: any) => {
-  //   if (responseData && responseData.data && responseData.data.picture) {
-  //     const imageData = `data:image/jpeg;base64,${responseData.data.picture}`;
-  //     setImageData(imageData);
-  //   } else {
-  //     console.error('Invalid response data or picture is undefined.');
-  //     // Handle the case where 'picture' property or its parent properties are not available
-  //   }
-  // };
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchVerdictData();
+    }, [])
+  );
 
   if (!verdictData) {
     return (
