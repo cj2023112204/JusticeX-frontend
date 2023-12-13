@@ -50,7 +50,7 @@ const IntroductionPage = () => {
 
             <View style={styles.wrapper}>
               <Text style={styles.header}>國民法官制度是什麼？</Text>
-              <Text style={styles.paragraph}>國民法官制度，就是由一群來自各行各業的民眾，{'\n'}
+              <Text style={[styles.paragraph,{marginLeft:20,fontSize:15,marginTop:30}]}>國民法官制度，就是由一群來自各行各業的民眾，{'\n'}
                 與法官一起坐在法檯上，共同審判的制度。{'\n'}{'\n'}
 
                 國民法官雖然沒有法律背景，{'\n'}
@@ -97,7 +97,7 @@ const IntroductionPage = () => {
                   source={require('../../assets/images/v.png')}
                   resizeMode="cover"
                 />
-                <Text style={styles.paragraph1}>地方法院管轄區域連續居住滿 4 個月以上</Text>
+                <Text style={styles.paragraph1}>地方法院管轄區域居住滿 4 個月以上</Text>
               </View>
 
             </View>
@@ -260,6 +260,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 30,
+    marginBottom:50,
   },
   header: {
     top: '70%',
@@ -273,6 +274,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     color: 'black',
     fontWeight: 'bold',
+    // marginTop:5,
+    marginHorizontal:20,
   },
   iconStyle: {
     width: 20,
@@ -280,10 +283,12 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   listwrapper: {
+    
     bottom: '40%',
     flexDirection: 'row',
     alignItems: 'center',
     marginVertical: 13,
+    paddingLeft:10,
   },
   paragraph1: {
     top: '110%',

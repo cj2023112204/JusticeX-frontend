@@ -32,7 +32,7 @@ const Home = () => {
 
   const handleSearch = async (query) => {
     setSearchQuery(query); // Assuming you have a state variable for searchQuery
-  
+
     try {
       const accessToken = await AsyncStorage.getItem('access_token');
       const response = await fetch(`${API_URL}/verdict/filter_verdicts/?title=${query}&page=1`, {
@@ -40,11 +40,11 @@ const Home = () => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-  
+
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
-  
+
       const responseData = await response.json();
       setData(responseData.data);
     } catch (error) {
@@ -54,8 +54,8 @@ const Home = () => {
       setIsLoading(false);
     }
   };
-  
-  
+
+
   useEffect(() => {
     getData();
   }, []);
@@ -94,7 +94,7 @@ const Home = () => {
 
   };
 
-  const fliter_data = async() =>{
+  const fliter_data = async () => {
     const accessToken = await AsyncStorage.getItem('access_token');
     fetch(`${API_URL}/verdict/filter_verdicts/?title=竊盜&page=1`, {
       headers: {
@@ -244,7 +244,7 @@ const Home = () => {
       <TouchableOpacity
         key={index.toString()}
         style={{ flex: 1, alignItems: "center", paddingTop: 21, paddingBottom: 10 }}
-        onPress={() => navigation.navigate('Verdict', { verdictId: item.verdict_id } )}
+        onPress={() => navigation.navigate('Verdict', { verdictId: item.verdict_id })}
       >
         <Card
           title={item.title}
@@ -274,13 +274,16 @@ const Home = () => {
       <View style={[styles.parent, styles.tabFlexBox]}>
         <TextInput
           style={[styles.text, styles.textTypo1]}
-          inputMode="text"
+          // inputMode="text"
+          // keyboardType="default"
           placeholder="搜尋判例"
-          clearButtonMode="always"
-          autoCapitalize="none"
-          autoCorrect={false}
+          //clearButtonMode="always"
+          // autoCapitalize="none"
+          // autoCorrect={false}
           value={searchQuery}
           onChangeText={(query) => handleSearch(query)}
+        // returnKeyType="done"
+        // onFocus={() => console.log("TextInput focused")}
         />
         <MaterialCommunityIcons
           style={styles.cocoboldsearchIcon}
@@ -289,7 +292,7 @@ const Home = () => {
         />
       </View>
       <Divider style={[styles.dividerIcon]}></Divider>
-      <View style={{ height: 130 }}>
+      <View style={{ height: 75, marginTop: 50, }}>
         <FlatList
           contentContainerStyle={styles.tagContainer}
           data={tags}
@@ -663,12 +666,12 @@ const styles = StyleSheet.create({
   },
   tagContainer: {
     position: 'absolute',
-    top: 79, // 调整这个值以达到期望的位置
+    marginTop: 30, // 调整这个值以达到期望的位置
     // zIndex: 0,
     flexDirection: 'row', // 水平排列标签
     alignItems: 'center', // 居中标签
     paddingHorizontal: 10,
-    paddingVertical: 5,
+    // paddingVertical: 5,
     // height:30,
     backgroundColor: 'transparent', // 使背景透明
   },
@@ -701,7 +704,7 @@ const styles = StyleSheet.create({
     margin: 10,           // 標籤之間的外邊距
     height: 30,
   },
-  selectedTagText:{
+  selectedTagText: {
     color: Color.grey4,      // 文本顏色
     fontSize: 14,        // 文本字體大小
     fontWeight: 'bold',

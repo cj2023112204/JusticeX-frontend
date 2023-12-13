@@ -744,7 +744,7 @@ const Verdict = () => {
 
                     <TouchableOpacity onPress={handleToggleIncidentType}>
                         <View style={[styles.primaryButton, styles.primarySpaceBlock]}>
-                            <Text style={styles.button}>{incidentTypeText}</Text>
+                            <Text style={styles.button1}>{incidentTypeText}</Text>
                         </View>
                     </TouchableOpacity>
                     <Text
@@ -817,7 +817,7 @@ const Verdict = () => {
 
                 </ScrollView>
 
-                <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#fff', padding: 10 }}>
+                <View style={{ position: 'absolute', bottom: 0, left: 0, right: 0, backgroundColor: '#fff'}}>
                     <View style={[styles.bottomBarChild, styles.bottomLayout]} />
                     <View style={[styles.downloadPro, styles.downloadProPosition]}>
                         <View style={styles.profileFlexBox}>
@@ -846,7 +846,7 @@ const Verdict = () => {
                     </View>
 
                     <View style={[styles.primaryButton1, styles.downloadProPosition]}>
-                        <TouchableOpacity onPress={fetchData}><Text style={styles.button}>統計圖表</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={fetchData}><Text style={styles.buttonChart}>統計圖表</Text></TouchableOpacity>
                     </View>
                     <View style={[styles.frameView, styles.profileFlexBox]}>
                         <TouchableOpacity onPress={handleLike}>
@@ -1153,7 +1153,7 @@ const styles = StyleSheet.create({
     },
     bottomLayout: {
         height: 64,
-        width: 390,
+        width: '100%',
         left: 0,
         position: "relative",
     },
@@ -1286,8 +1286,15 @@ const styles = StyleSheet.create({
         left: 25,
         position: "relative",
     },
-    button: {
+    button1: {
         fontSize: 12,
+        textAlign: "left",
+        // fontFamily: "PlusJakartaSans-Medium",
+        fontWeight: "500",
+        color: "#fff",
+    },
+    buttonChart: {
+        fontSize: 10,
         textAlign: "left",
         // fontFamily: "PlusJakartaSans-Medium",
         fontWeight: "500",
