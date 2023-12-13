@@ -288,7 +288,7 @@ const Home = () => {
         />
       </View>
       <Divider style={[styles.dividerIcon]}></Divider>
-      <View style={{ height: 130 }}>
+      <View style={{ height: 75,marginTop:50 }}>
         <FlatList
           contentContainerStyle={styles.tagContainer}
           data={tags}
@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
   },
   tagContainer: {
     position: 'absolute',
-    top: 79, // 调整这个值以达到期望的位置
+    marginTop: 30, // 调整这个值以达到期望的位置
     // zIndex: 0,
     flexDirection: 'row', // 水平排列标签
     alignItems: 'center', // 居中标签
