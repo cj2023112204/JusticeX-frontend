@@ -150,7 +150,7 @@ const TrendScreen = () => {
                                 <BarChart
                                     data={data}
                                     width={width * 1.5}
-                                    height={height}
+                                    height={height-60}
                                     yAxisLabel=""
                                     chartConfig={chartConfig}
                                     yAxisSuffix='%'
